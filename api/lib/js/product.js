@@ -3,10 +3,6 @@ $(function($){
     // 隐藏数据库里的id
     $('#objectID').parents('.form-group').css('display', 'none');
 
-    // 判断input框状态 不能为空
-    function format(){
-    }
-
     // 点击tr高亮,并把数据库的内容显示在val框里
     function active(){
         $('tbody').on('click', 'td', function(){
@@ -20,11 +16,27 @@ $(function($){
             $('#SalePrice').val($(this).parents('tr').children().eq(4).text()); 
             $('#purPrice').val($(this).parents('tr').children().eq(5).text()); 
             $('#objectID').val($(this).parents('tr').attr('data-guid'));
+
         })
-    }
+    };
     active();
+    // 获取返回的消息显示元素
+    var $responseMessage = $('#responseMessage');
+    // 返回消息显示
+    function response(resSta,$ele,resMessage){
+        $ele.html(resMessage);
+        if(!resSta){
+            $ele.css('color', '#f00');
+            return false;
+        }
+        $ele.css('color', '#58bc58');
+    }
     // 添加
     $('#addPro').click(function(){
+        if($('#barCode').val() == ''){
+            $responseMessage.html('添加失败，请输入条形码').css('color', '#f00');
+            return false;
+        }
         $.post("http://localhost:88/addProduct", {
             proType:$('#productType').val(),
             proName:$('#productName').val(),
@@ -36,10 +48,12 @@ $(function($){
             proQty:1
         }, function(res){
             console.log(res);
-            // 输入框为空
-            $('input').val('');
+            // 输入框为空,加载数据库的数据，显示返回消息
+            // $('input').val('');
             $('tbody').html('');
             showProduct();
+            response(res.status,$responseMessage, res.message);
+
         });
 
     });
@@ -50,14 +64,11 @@ $(function($){
             _id:$('#objectID').val()
         }, function(res){
             console.log(res);
-
-            if(!res.status){
-                return false;
-            }
-            // 输入框为空
+            // 输入框为空,加载数据库的数据，显示返回消息
             $('input').val('');
             $('tbody').html('');
-            showProduct();   
+            showProduct(); 
+            response(res.status,$responseMessage, res.message);  
         });
     });
     // 查询
@@ -74,15 +85,15 @@ $(function($){
         }, function(res){
             console.log(res);
             $('tbody').html('');
+            response(res.status, $responseMessage, res.message);
             if(!res.status){
-                $('tbody').html(res.message);
                 return false;
             }
             if(res.data.length > 0){
                 $.each(res.data, function(idx,item){
                     // console.log(idx,item);
                     var html = `
-                        <tr>
+                        <tr data-guid="${item._id}">
                             <th scope="row">${idx+1}</th>
                             <td>${item.proType}</td>
                             <td>${item.proName}</td>
@@ -123,7 +134,7 @@ $(function($){
             type:"POST",
             data:{},
             success:function(res){
-                console.log(res.data);
+                // console.log(res.data);
                 if(!res.status){
                     var html = `<tr><td>${res.message}</td></tr>`;
                     $('tbody').html(html).css('text-align', 'center');
@@ -151,8 +162,5 @@ $(function($){
         
     }
     showProduct();
-
-    // 将数据库的东西显示在value框里
-    // 没写完
         
 });

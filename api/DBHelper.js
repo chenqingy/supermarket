@@ -59,7 +59,9 @@ module.exports = {
                     return false;
                 }
                 // 没写完的
-                collection.update()
+                /*collection.save({},{}, function(){
+
+                });*/
             })
         })
     },
