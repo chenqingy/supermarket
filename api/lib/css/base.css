@@ -1,0 +1,75 @@
+body,h1,h2,h3,h4,h5,h6,ul,li,ol,li,dl,dt,dd,p{
+    margin:0;padding:0;
+}
+ul,li{
+    list-style:none;
+}
+a{
+    text-decoration:none;
+}
+img{
+    border:0 none;
+    display:block;
+}
+.box{
+    width:100%;
+    min-width:1200px;
+}
+.container{
+    width:1200px;
+    margin:0 auto;
+}
+/*兼容到IE8只能写一个冒号*/
+.clearfix::after{
+    content:"";
+    display:block;
+    height:0;
+    clear:both;
+    overflow:hidden;
+    visibility:hidden;
+    zoom:1;
+}
+input{
+    padding:0;
+    outline: none;
+}
+i{
+    /*position:absolute;*/
+    /*display:block;*/
+}
+*{
+    box-sizing:border-box;
+}
+body{
+    font-size:14px;
+    font-family: "微软雅黑";
+}
+nav{
+    height:700px;
+    float:left;
+}
+article{
+  overflow:hidden;
+}
+article .gongNeng .hander{
+    text-align: center;
+    padding:20px 0 0 10px;
+}
+article#main_content{
+    padding: 10px;
+}
+article .menu{
+    padding:30px;
+    /*display:none;*/
+}
+article .menu form .form-group{
+    margin-right:60px;
+    margin-top:10px;
+}
+article .button{
+    margin-top:5px;
+    padding-left:703px;
+    padding-bottom: 20px;
+    border-bottom: 5px dashed #ddd;
+}
+table.table{margin-top: 20px;padding-top: 20px;}
