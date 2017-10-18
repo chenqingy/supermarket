@@ -1,5 +1,5 @@
 var mongodb = require('mongodb');
-var dbServer = new mongodb.Server('10.3.131.16', 27017);
+var dbServer = new mongodb.Server('10.3.131.4', 27017);
 var db = new mongodb.Db('supermarket', dbServer);
 var apiResult = require('./ApiResult.js');
 
@@ -19,8 +19,8 @@ module.exports = {
                 collection.insert(_data);
                 _callback(apiResult(true, _data));
 
-                db.close();
             })
+            db.close();
             
         })
     },
@@ -36,16 +36,16 @@ module.exports = {
                     return false;
                 }
                 collection.find(_condition || {}).toArray(function(error, dataset){
+                    console.log(dataset);
                     if(error){
                         _callback(apiResult(false, null, error));
                         return false;
                     }
                     _callback(apiResult(true, dataset));
-                });
-                db.close();
-                
-            })
-        })
+                }); 
+            });
+            db.close();
+        });
     },
     update: function(_collection, _condition, _callback){
         db.open(function(error, db){
@@ -62,7 +62,8 @@ module.exports = {
                 /*collection.save({},{}, function(){
 
                 });*/
-            })
+            });
+            db.close();
         })
     },
     delete: function(_collection, _condition, _callback){
@@ -83,9 +84,9 @@ module.exports = {
                     }
                     _callback(apiResult(true, dataset, "删除成功"));
                 })
-                db.close();
-                
-            })
+            });
+            db.close();    
+
         })
     },
     //数据分页
@@ -109,8 +110,8 @@ module.exports = {
                     }
                     _callback(apiResult(true, dataset, error));
                 });
-                db.close(); 
             })
+            db.close(); 
         })
     }
 }
