@@ -41,6 +41,7 @@ module.exports = {
                         _callback(apiResult(false, null, error));
                         return false;
                     }
+                    console.log(dataset)
                     _callback(apiResult(true, dataset));
                 }); 
             });
