@@ -33,6 +33,11 @@ module.exports = {
             if (request.body) {
                 doc = request.body;
             }
+            console.log(doc);
+            if(doc._id==''){
+                response.send(apiResult(false, null, "没有该商品，请重新输入"));
+                return false;
+            }
             var mongodb = require('mongodb');
             var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
             db.delete("product", {"_id":obj_id}, function(result){
@@ -45,7 +50,7 @@ module.exports = {
         });
         // 查询商品
         app.post("/selectProduct", urlencode, function(request, response){
-            console.log(request.body);
+            // console.log(request.body);
             var obj = {};
             for(var key in request.body){
                 if(request.body[key]){
@@ -55,8 +60,6 @@ module.exports = {
             }
             // console.log(obj);
             db.select("product", obj, function(result){
-                // console.log(request.body);
-                // console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, error));
                     return false;
@@ -69,6 +72,11 @@ module.exports = {
                 }
             })
         });
+
+        app.post("/modProduct", urlencode, function(request, response){
+            console.log(response.body);
+            response.send('请求成功');
+        })
         // 所有商品
         app.post("/allProduct", urlencode, function(request, response){
             db.select("product", {}, function(result){

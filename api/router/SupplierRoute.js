@@ -31,20 +31,53 @@ module.exports = {
                 } 
             })
         });
-        
-        /*app.post("/login", urlencode, function(request, response){
-            db.select("user", request.body, function(result){
+        // 删除商品
+        app.post("/delSupplier", urlencode, function(request, response){
+            var doc = {};
+            if (request.body) {
+                doc = request.body;
+            }
+            console.log(doc);
+            var mongodb = require('mongodb');
+            var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
+            db.delete("supplier", {"_id":obj_id}, function(result){
+                if(!result.status){
+                    response.send(apiResult(false, null, "删除错误"));
+                    return false;
+                }
+                response.send(apiResult(true, request.body, "删除成功"));
+            });
+        });
+
+        // 查询商品
+        app.post("/selectSupplier", urlencode, function(request, response){
+            // console.log(request.body);
+            var obj = {};
+            for(var key in request.body){
+                if(request.body[key]){
+                    var value = request.body[key];
+                    obj[key] = value;
+                }
+            }
+            // console.log(obj);
+            db.select("supplier", obj, function(result){
+                console.log(obj);
                 console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, error));
                     return false;
                 }
-                if(result.data.length > 0 ){
-                    response.send(apiResult(true, request.body, "登录成功"));
-                } else {
-                    response.send(apiResult(false, null, "用户名和密码不匹配"));
-                }
+                // if(result.data){
+                //     // console.log(result.data);
+                //     response.send(apiResult(true, result.data, "查询成功"));
+                // } else {
+                //     response.send(apiResult(false, null, "没有该商品，请重新查询"));
+                // }
+                response.send(apiResult(true, result.data, "查询成功"));
             })
-        })*/
+        });
+
+
+
     }
 }

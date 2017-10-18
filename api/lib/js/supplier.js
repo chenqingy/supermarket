@@ -1,4 +1,7 @@
 $(function($){
+    // 隐藏数据库里的id
+    $('#objectID').parents('.form-group').css('display', 'none');
+
     $('#addSupplier').click(function(){
         var $supplierType = $('#supplierType').val();
         var $supplierName = $('#supplierName').val();
@@ -22,6 +25,8 @@ $(function($){
                 alert('增加数据成功');
                 $('#tablelist').text('');
                 render();
+                $('input').val('');
+                $('tbody').html('');
             }
         })  
     });
@@ -36,7 +41,7 @@ $(function($){
             // console.log(response);
             if(response.status){
                 $.each(response.data, function(index, item){
-                    var html = `<tr>
+                    var html = `<tr data-guid="${item._id}">
                                 <th>${index+1}</th>
                                 <td>${item.supplierType}</td>
                                 <td>${item.supplierId}</td>
@@ -61,4 +66,74 @@ $(function($){
         // render(5, pageNo);
         alert('我不能再给你更多了');
     })
+
+    function active(){
+        $('tbody').on('click', 'td', function(){
+            // console.log($(this));
+            // 点击tr高亮
+            $(this).parents('tr').css('background-color', '#0e90b2').siblings().css('background-color', '');
+
+            $('#supplierType').val($(this).parents('tr').children().eq(1).text());
+            $('#supplierName').val($(this).parents('tr').children().eq(2).text()); 
+            $('#supplierIden').val($(this).parents('tr').children().eq(3).text()); 
+            $('#supplierPhone').val($(this).parents('tr').children().eq(4).text()); 
+            $('#supplierCom').val($(this).parents('tr').children().eq(5).text()); 
+            $('#objectID').val($(this).parents('tr').attr('data-guid'));
+            console.log($('#objectID').val());
+        })
+    }
+    active();
+
+    // 删除
+    $('#remSupplier').click(function(){
+        // console.log($('#objectID').val())
+        $.post("http://localhost:88/delSupplier", {
+            _id:$('#objectID').val()
+        }, function(res){
+            // console.log(res);
+
+            if(!res.status){
+                return false;
+            }
+            // 输入框为空
+            $('input').val('');
+            $('tbody').html('');
+            render(); 
+        });
+    });
+
+    // 查询
+    $('#selSupplier').click(function(){
+        $.post("http://localhost:88/selectSupplier", {
+            supplierType:$('#supplierType').val(),
+            supplierName:$('#supplierName').val(),
+            supplierIden:$('#supplierIden').val(),
+            supplierPhone:$('#supplierPhone').val(),
+            supplierCom:$('#supplierCom').val()
+        }, function(res){
+            console.log(res);
+            $('tbody').html('');
+            if(!res.status){
+                $('tbody').html(res.message);
+                return false;
+            }
+            if(res.data.length > 0){
+                $.each(res.data, function(idx,item){
+                    // console.log(idx,item);
+                    var html = `<tr data-guid="${item._id}">
+                               <th>${idx+1}</th>
+                               <td>${item.supplierType}</td>
+                               <td>${item.supplierId}</td>
+                               <td>${item.supplierName}</td>
+                               <td>${item.supplierPhone}</td>
+                               <td>${item.supplierCom}</td>
+                               </tr>`;
+                    $('#tablelist').append(html);
+                    // $('tbody').append(html);
+                });
+            }
+        });
+    });
+
+
 })

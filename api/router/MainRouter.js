@@ -5,6 +5,7 @@ var orderControlRoute = require('./orderControlRoute.js');
 // 所有的路由映射表
 // var allRouter = Object.assign({}, userRouter, productRouter, supplierRouter);
 
+
 module.exports = {
     Register: function(express){
         var app = express();
@@ -30,6 +31,7 @@ module.exports = {
         productRouter.Register(app);
         supplierRouter.Register(app);
         orderControlRoute.Register(app);
-        // productRouter.Register(app);
+
+
     }
 }
