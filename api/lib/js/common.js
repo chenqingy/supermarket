@@ -1,7 +1,11 @@
 // 将头部引入
 $(function($){
     $('#Head').load('../../common.html #header');
-    $('#Main_nav').load('../../common.html #main_nav');
+    $('#Main_nav').load('../../common.html #main_nav', function(){
+        console.log($('#main_content'));
+        $navHeight = $('#main_content').height();
+        $('#Main_nav').height($navHeight);
+    });
 
 });
 var common = common || {};
@@ -19,3 +23,4 @@ function response(resSta,$ele,resMessage){
     }
     $ele.css('color', '#58bc58');
 }
+

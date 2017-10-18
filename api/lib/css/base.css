@@ -47,8 +47,10 @@ body{
  #header{
     height:72px;
 } 
+
 #Main_nav{
     width:13%;
+    background-color:#F5F5F5;
     float:left;
 } 
 article{
