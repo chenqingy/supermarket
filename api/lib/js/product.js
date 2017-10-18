@@ -14,30 +14,22 @@ $(function($){
             $('#productName').val($(this).parents('tr').children().eq(2).text()); 
             $('#productDes').val($(this).parents('tr').children().eq(3).text()); 
             $('#SalePrice').val($(this).parents('tr').children().eq(4).text()); 
-            $('#purPrice').val($(this).parents('tr').children().eq(5).text()); 
+            $('#purPrice').val($(this).parents('tr').children().eq(5).text());
+            $('#barCode').val($(this).parents('tr').children('th').attr('barcode'));
             $('#objectID').val($(this).parents('tr').attr('data-guid'));
-
         })
     };
     active();
     // 获取返回的消息显示元素
     var $responseMessage = $('#responseMessage');
-    // 返回消息显示
-    function response(resSta,$ele,resMessage){
-        $ele.html(resMessage);
-        if(!resSta){
-            $ele.css('color', '#f00');
-            return false;
-        }
-        $ele.css('color', '#58bc58');
-    }
+    
     // 添加
     $('#addPro').click(function(){
         if($('#barCode').val() == ''){
             $responseMessage.html('添加失败，请输入条形码').css('color', '#f00');
             return false;
         }
-        $.post("http://localhost:88/addProduct", {
+        $.post(common.baseUrl + "addProduct", {
             proType:$('#productType').val(),
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
@@ -60,7 +52,7 @@ $(function($){
     // 删除
     $('#delPro').click(function(){
 
-        $.post("http://localhost:88/delProduct", {
+        $.post(common.baseUrl + "delProduct", {
             _id:$('#objectID').val()
         }, function(res){
             console.log(res);
@@ -73,7 +65,7 @@ $(function($){
     });
     // 查询
     $('#selPro').click(function(){
-        $.post("http://localhost:88/selectProduct", {
+        $.post(common.baseUrl + "selectProduct", {
             proType:$('#productType').val(),
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
@@ -94,7 +86,7 @@ $(function($){
                     // console.log(idx,item);
                     var html = `
                         <tr data-guid="${item._id}">
-                            <th scope="row">${idx+1}</th>
+                            <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
                             <td>${item.proType}</td>
                             <td>${item.proName}</td>
                             <td>${item.proDes}</td>
@@ -111,7 +103,7 @@ $(function($){
     
     // 修改
     $('#modPro').click(function(){
-        $.post("http://localhost:88/modProduct", {
+        $.post(common.baseUrl + "modProduct", {
             proType:$('#productType').val(),
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
@@ -119,18 +111,19 @@ $(function($){
             proPurPrice:$('#purPrice').val(),
             proBarCode:$('#barCode').val(),
             proSelect:$('#select').val(),
-            proQty:1
+            proQty:1,
+            _id:$('#objectID').val()
         }, function(res){
             console.log(res);
-            /*$('tbody').html('');
-            showProduct();*/
+            $('tbody').html('');
+            showProduct();
         });
     })
 
     // 刷新页面 将所有商品显示在tbody下
     function showProduct(){
         $.ajax({
-            url:"http://localhost:88/allProduct",
+            url:common.baseUrl + "allProduct",
             type:"POST",
             data:{},
             success:function(res){
@@ -145,7 +138,7 @@ $(function($){
                         // console.log(idx,item);
                         var html = `
                             <tr data-guid="${item._id}">
-                                <th scope="row">${idx+1}</th>
+                                <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
                                 <td>${item.proType}</td>
                                 <td>${item.proName}</td>
                                 <td>${item.proDes}</td>

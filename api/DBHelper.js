@@ -19,8 +19,8 @@ module.exports = {
                 collection.insert(_data);
                 _callback(apiResult(true, _data));
 
-                db.close();
             })
+            db.close();
             
         })
     },
@@ -40,30 +40,32 @@ module.exports = {
                         _callback(apiResult(false, null, error));
                         return false;
                     }
-                    console.log(dataset)
                     _callback(apiResult(true, dataset));
-                });
-                db.close();
-                
-            })
-        })
+                }); 
+            });
+            db.close();
+        });
     },
-    update: function(_collection, _condition, _callback){
+    update: function(_collection, _condition, _newdata, _callback){
         db.open(function(error, db){
             if(error){
                 _callback(false, null, error);
                 return false;
             }
-            collection(_collection, function(error, collection){
+            db.collection(_collection, function(error, collection){
                 if(error){
                     _callback(apiResult(false, null, error));
                     return false;
                 }
-                // 没写完的
-                /*collection.save({},{}, function(){
-
-                });*/
-            })
+                collection.update(_condition || {}, _newdata || {}, function(error, dataset){
+                    if(error){
+                        _callback(apiResult(false, null, error));
+                        return false;
+                    }
+                    _callback(apiResult(true, dataset));
+                });
+            });
+            db.close();
         })
     },
     delete: function(_collection, _condition, _callback){
@@ -84,9 +86,9 @@ module.exports = {
                     }
                     _callback(apiResult(true, dataset, "删除成功"));
                 })
-                db.close();
-                
-            })
+            });
+            db.close();    
+
         })
     },
     //数据分页
@@ -110,8 +112,8 @@ module.exports = {
                     }
                     _callback(apiResult(true, dataset, error));
                 });
-                db.close(); 
             })
+            db.close(); 
         })
     }
 }
