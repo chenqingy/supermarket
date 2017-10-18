@@ -13,7 +13,7 @@ $(function($){
             alert('填写完整数据');
             return false;
         }
-        $.post('http://localhost:88/addSupplier',{
+        $.post(common.baseUrl + 'addSupplier',{
             supplierType:$('#supplierType').val(),
             supplierName:$('#supplierName').val(),
             supplierIden:$('#supplierIden').val(),
@@ -34,7 +34,7 @@ $(function($){
 
     render();
     function render(qty, pageNo){
-        $.post('http://localhost:88/addAll',{
+        $.post(common.baseUrl + 'addAll',{
             // qty:qty,
             // pageNo:pageNo
         },
@@ -100,7 +100,7 @@ $(function($){
     // 删除
     $('#remSupplier').click(function(){
         // console.log($('#objectID').val())
-        $.post("http://localhost:88/delSupplier", {
+        $.post(common.baseUrl + "delSupplier", {
             _id:$('#objectID').val()
         }, function(res){
             // console.log(res);
@@ -118,7 +118,7 @@ $(function($){
 
     // 查询
     $('#selSupplier').click(function(){
-        $.post("http://localhost:88/selectSupplier", {
+        $.post(common.baseUrl + "selectSupplier", {
             supplierType:$('#supplierType').val(),
             supplierName:$('#supplierName').val(),
             supplierIden:$('#supplierIden').val(),

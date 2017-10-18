@@ -34,7 +34,7 @@ module.exports = {
                 doc = request.body;
             }
             console.log(doc);
-            if(doc._id==''){
+            if(doc._id == ''){
                 response.send(apiResult(false, null, "没有该商品，请重新输入"));
                 return false;
             }
@@ -80,7 +80,7 @@ module.exports = {
         // 所有商品
         app.post("/allProduct", urlencode, function(request, response){
             db.select("product", {}, function(result){
-                // console.log(result);
+                console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, "数据请求错误"));
                     return false;

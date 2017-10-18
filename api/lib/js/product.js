@@ -37,7 +37,7 @@ $(function($){
             $responseMessage.html('添加失败，请输入条形码').css('color', '#f00');
             return false;
         }
-        $.post("http://localhost:88/addProduct", {
+        $.post(common.baseUrl + "addProduct", {
             proType:$('#productType').val(),
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
@@ -52,7 +52,7 @@ $(function($){
             // $('input').val('');
             $('tbody').html('');
             showProduct();
-            response(res.status,$responseMessage, res.message);
+            response(res.status, $responseMessage, res.message);
 
         });
 
@@ -60,7 +60,7 @@ $(function($){
     // 删除
     $('#delPro').click(function(){
 
-        $.post("http://localhost:88/delProduct", {
+        $.post(common.baseUrl + "delProduct", {
             _id:$('#objectID').val()
         }, function(res){
             console.log(res);
@@ -68,12 +68,12 @@ $(function($){
             $('input').val('');
             $('tbody').html('');
             showProduct(); 
-            response(res.status,$responseMessage, res.message);  
+            response(res.status, $responseMessage, res.message);  
         });
     });
     // 查询
     $('#selPro').click(function(){
-        $.post("http://localhost:88/selectProduct", {
+        $.post(common.baseUrl + "selectProduct", {
             proType:$('#productType').val(),
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
@@ -111,7 +111,7 @@ $(function($){
     
     // 修改
     $('#modPro').click(function(){
-        $.post("http://localhost:88/modProduct", {
+        $.post(common.baseUrl + "modProduct", {
             proType:$('#productType').val(),
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
@@ -130,10 +130,11 @@ $(function($){
     // 刷新页面 将所有商品显示在tbody下
     function showProduct(){
         $.ajax({
-            url:"http://localhost:88/allProduct",
+            url:common.baseUrl + "allProduct",
             type:"POST",
             data:{},
             success:function(res){
+                // console.log(res);
                 // console.log(res.data);
                 if(!res.status){
                     var html = `<tr><td>${res.message}</td></tr>`;
