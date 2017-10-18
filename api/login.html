@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>µÇÂ¼Ò³Ãæ</title>
+    <title>ÂµÃ‡Ã‚Â¼Ã’Â³ÃƒÃ¦</title>
     <link rel="stylesheet" type="text/css" href="lib/css/base.css" />
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css" />
     <script type="text/javascript" src="lib/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="lib/jquery.cookie.js"></script>
     <script type="text/javascript" src="lib/js/common.js"></script>
     <style>
         form{width: 300px;margin: 200px auto;}
@@ -15,13 +16,13 @@
 <body>
     <div class="container">
         <form class="form-signin">
-            <h3 class="form-signin-heading">»¶Ó­µÇÂ¼³¬ÊĞºóÌ¨¹ÜÀíÏµÍ³</h3>
+            <h3 class="form-signin-heading">æ¬¢è¿ç™»å½•è¶…å¸‚åå°ç®¡ç†ç³»ç»Ÿ</h3>
             <label for="username" class="sr-only">Email address</label>
-            <input type="text" id="username" class="form-control" placeholder="ÓÃ»§Ãû" required autofocus>
+            <input type="text" id="username" class="form-control" placeholder="ç”¨æˆ·å" required autofocus>
             <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" class="form-control" placeholder="ÃÜÂë" required>
+            <input type="password" id="password" class="form-control" placeholder="å¯†ç " required>
             <p id="tip"></p>
-            <button class="btn btn-lg btn-primary btn-block" type="button" id="btnLogin">µÇÂ¼</button>
+            <button class="btn btn-lg btn-primary btn-block" type="button" id="btnLogin">ç™»å½•</button>
         </form>
     </div>
 
@@ -30,7 +31,7 @@
             var username = $('#username').val();
             var password = $('#password').val();
             if(username.trim().length <= 0 && password.trim().length <= 0){
-                $('#tip').addClass('text-danger').text('ÇëÊäÈëÕıÈ·µÄÓÃ»§ÃûºÍÃÜÂë!');
+                $('#tip').addClass('text-danger').text('è¯·è¾“å…¥æ­£ç¡®çš„ç”¨æˆ·åå’Œå¯†ç !');
                 return false;
             }
             $.post(common.baseUrl + "login", {
@@ -39,12 +40,34 @@
             }, function(response){
                 // console.log(response);
                 if(response.status){
-                    $('#tip').addClass('text-success').text('µÇÂ½³É¹¦');
+                    $('#tip').addClass('text-success').text('ç™»å½•æˆåŠŸ');
+                    console.log(response.data.token);
+                    $.cookie('token',response.data.token , { expires: 7, path: '/' }); 
                     window.location.href = 'index.html';
                 } else {
                     $('#tip').addClass('text-danger').text(response.message);
                 }
             })
+
+            // $.ajax({
+            //     type: 'POST',
+            //     url: 'http://localhost:88/test1',
+            //     // data: {name: "dk"},
+            //     headers: {'Authorization': token},
+            //     success: function(response){
+            //         console.log(response);
+            //     }
+            // })
+            // var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx5eSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNTA4MzI1ODQwLCJleHAiOjE1MDgzMjcyODB9.VWrRMf7-5FHMlQDLH41Ao1XPIWzmsBx8ev1GnAayaPQ';
+            // $.ajax({
+            //     type: 'POST',
+            //     url: 'http://localhost:88/test1',
+            //     // data: {name: "dk"},
+            //     headers: {'Authorization': token},
+            //     success: function(response){
+            //         console.log(response);
+            //     }
+            // })
         })
 
     </script>

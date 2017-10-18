@@ -149,6 +149,21 @@ $(function($){
             }
         });
     });
+    // var token = $.cookie('token');
+    // $.ajax({
+    //     type: 'POST',
+    //     url: 'http://localhost:88/test1',
+    //     headers: {'Authorization': token},
+    //     success: function(response){
+    //         console.log(response);
+    //         if(!response.status){
+    //             var a = $('<a/>').text('请先登录在访问本页面').attr('href','login.html').css({'font-size':'36px','color':'#fff'});
+    //             var html = $('<div/>').css({'width':'100%','height':'100%','background-color':'rgba(0,0,0,0.5)',
+    //                 'position': 'absolute','text-align':'center','padding-top':'20%'}).html(a);
+    //             $('body').html(html);
+    //         }
+    //     }
+    // })
 
 
 })
