@@ -52,7 +52,7 @@ $(function($){
             // $('input').val('');
             $('tbody').html('');
             showProduct();
-            response(res.status,$responseMessage, res.message);
+            response(res.status, $responseMessage, res.message);
 
         });
 
@@ -68,7 +68,7 @@ $(function($){
             $('input').val('');
             $('tbody').html('');
             showProduct(); 
-            response(res.status,$responseMessage, res.message);  
+            response(res.status, $responseMessage, res.message);  
         });
     });
     // 查询
