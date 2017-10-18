@@ -17,7 +17,6 @@ $(function($){
             $('#purPrice').val($(this).parents('tr').children().eq(5).text());
             $('#barCode').val($(this).parents('tr').children('th').attr('barcode'));
             $('#objectID').val($(this).parents('tr').attr('data-guid'));
-
         })
     };
     active();
@@ -112,11 +111,12 @@ $(function($){
             proPurPrice:$('#purPrice').val(),
             proBarCode:$('#barCode').val(),
             proSelect:$('#select').val(),
-            proQty:1
+            proQty:1,
+            _id:$('#objectID').val()
         }, function(res){
             console.log(res);
-            /*$('tbody').html('');
-            showProduct();*/
+            $('tbody').html('');
+            showProduct();
         });
     })
 
@@ -127,7 +127,7 @@ $(function($){
             type:"POST",
             data:{},
             success:function(res){
-                console.log(res.data);
+                // console.log(res.data);
                 if(!res.status){
                     var html = `<tr><td>${res.message}</td></tr>`;
                     $('tbody').html(html).css('text-align', 'center');
