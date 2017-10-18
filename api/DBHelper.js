@@ -46,24 +46,24 @@ module.exports = {
             db.close();
         });
     },
-    update: function(_collection, _condition, _callback){
+    update: function(_collection, _condition, _newdata, _callback){
         db.open(function(error, db){
             if(error){
                 _callback(false, null, error);
                 return false;
             }
-            collection(_collection, function(error, collection){
+            db.collection(_collection, function(error, collection){
                 if(error){
                     _callback(apiResult(false, null, error));
                     return false;
                 }
-                /*collection.updata(_condition || {}).toArray(function(error, dataset){
+                collection.update(_condition || {}, _newdata || {}, function(error, dataset){
                     if(error){
                         _callback(apiResult(false, null, error));
                         return false;
                     }
                     _callback(apiResult(true, dataset));
-                });*/
+                });
             });
             db.close();
         })

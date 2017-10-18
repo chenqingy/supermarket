@@ -21,6 +21,7 @@ module.exports = {
                     db.insert("order", result.data, function(result){
                         // console.log(result);
                         // response.send(apiResult(true, request.body, "添加成功"));
+                        
                     });
                     response.send(apiResult(true, result.data, "查询成功"));
                     
@@ -28,6 +29,27 @@ module.exports = {
                     response.send(apiResult(false, null, "没有该商品，请重新查询"));
                 }
             })
+        });
+        // 删除商品
+        app.post("/delorderControl", urlencode, function(request, response){
+            var doc = {};
+            if (request.body) {
+                doc = request.body;
+            }
+            console.log(doc);
+            if(doc._id==''){
+                response.send(apiResult(false, null, "没有该商品，请重新输入"));
+                return false;
+            }
+            var mongodb = require('mongodb');
+            var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
+            db.delete("order", {"_id":obj_id}, function(result){
+                if(!result.status){
+                    response.send(apiResult(false, null, "删除错误"));
+                    return false;
+                }
+                response.send(apiResult(true, request.body, "删除成功"));
+            });
         });
     }
 }
