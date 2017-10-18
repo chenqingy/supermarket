@@ -22,15 +22,7 @@ $(function($){
     active();
     // 获取返回的消息显示元素
     var $responseMessage = $('#responseMessage');
-    // 返回消息显示
-    function response(resSta,$ele,resMessage){
-        $ele.html(resMessage);
-        if(!resSta){
-            $ele.css('color', '#f00');
-            return false;
-        }
-        $ele.css('color', '#58bc58');
-    }
+    
     // 添加
     $('#addPro').click(function(){
         if($('#barCode').val() == ''){

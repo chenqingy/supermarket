@@ -35,7 +35,7 @@ module.exports = {
             }
             console.log(doc);
             if(doc._id == ''){
-                response.send(apiResult(false, null, "没有该商品，请重新输入"));
+                response.send(apiResult(false, null, "删除失败没有该商品，请重新输入"));
                 return false;
             }
             var mongodb = require('mongodb');
@@ -80,7 +80,7 @@ module.exports = {
         // 所有商品
         app.post("/allProduct", urlencode, function(request, response){
             db.select("product", {}, function(result){
-                console.log(result);
+                // console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, "数据请求错误"));
                     return false;
