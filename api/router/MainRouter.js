@@ -1,8 +1,9 @@
 var userRouter = require('./UserRouter.js');
 var productRouter = require('./ProductRoute.js');
 var supplierRouter = require('./SupplierRoute.js');
+var orderControlRoute = require('./orderControlRoute.js');
 // 所有的路由映射表
-var allRouter = Object.assign({}, userRouter, productRouter, supplierRouter);
+// var allRouter = Object.assign({}, userRouter, productRouter, supplierRouter);
 
 module.exports = {
     Register: function(express){
@@ -25,7 +26,10 @@ module.exports = {
         
         app.use(express.static(__dirname + '/'));
 
-        allRouter.Register(app);
+        userRouter.Register(app);
+        productRouter.Register(app);
+        supplierRouter.Register(app);
+        orderControlRoute.Register(app);
         // productRouter.Register(app);
     }
 }
