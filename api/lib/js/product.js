@@ -14,7 +14,8 @@ $(function($){
             $('#productName').val($(this).parents('tr').children().eq(2).text()); 
             $('#productDes').val($(this).parents('tr').children().eq(3).text()); 
             $('#SalePrice').val($(this).parents('tr').children().eq(4).text()); 
-            $('#purPrice').val($(this).parents('tr').children().eq(5).text()); 
+            $('#purPrice').val($(this).parents('tr').children().eq(5).text());
+            $('#barCode').val($(this).parents('tr').children('th').attr('barcode'));
             $('#objectID').val($(this).parents('tr').attr('data-guid'));
 
         })
@@ -86,7 +87,7 @@ $(function($){
                     // console.log(idx,item);
                     var html = `
                         <tr data-guid="${item._id}">
-                            <th scope="row">${idx+1}</th>
+                            <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
                             <td>${item.proType}</td>
                             <td>${item.proName}</td>
                             <td>${item.proDes}</td>
@@ -126,8 +127,7 @@ $(function($){
             type:"POST",
             data:{},
             success:function(res){
-                // console.log(res);
-                // console.log(res.data);
+                console.log(res.data);
                 if(!res.status){
                     var html = `<tr><td>${res.message}</td></tr>`;
                     $('tbody').html(html).css('text-align', 'center');
@@ -138,7 +138,7 @@ $(function($){
                         // console.log(idx,item);
                         var html = `
                             <tr data-guid="${item._id}">
-                                <th scope="row">${idx+1}</th>
+                                <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
                                 <td>${item.proType}</td>
                                 <td>${item.proName}</td>
                                 <td>${item.proDes}</td>

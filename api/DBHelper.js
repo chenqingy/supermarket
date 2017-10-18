@@ -36,12 +36,10 @@ module.exports = {
                     return false;
                 }
                 collection.find(_condition || {}).toArray(function(error, dataset){
-                    console.log(dataset);
                     if(error){
                         _callback(apiResult(false, null, error));
                         return false;
                     }
-                    console.log(dataset)
                     _callback(apiResult(true, dataset));
                 }); 
             });
