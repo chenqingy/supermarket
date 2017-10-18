@@ -3,8 +3,19 @@ $(function($){
     $('#Head').load('../../common.html #header');
     $('#Main_nav').load('../../common.html #main_nav');
 
-    
-    
 });
 var common = common || {};
 common.baseUrl = 'http://localhost:88/';
+
+// 返回消息显示 
+// resSta为返回的状态
+// $ele为显示返回消息的元素
+// resMessage为返回的消息内容
+function response(resSta,$ele,resMessage){
+    $ele.html(resMessage);
+    if(!resSta){
+        $ele.css('color', '#f00');
+        return false;
+    }
+    $ele.css('color', '#58bc58');
+}

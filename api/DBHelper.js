@@ -36,12 +36,10 @@ module.exports = {
                     return false;
                 }
                 collection.find(_condition || {}).toArray(function(error, dataset){
-                    console.log(dataset);
                     if(error){
                         _callback(apiResult(false, null, error));
                         return false;
                     }
-                    console.log(dataset)
                     _callback(apiResult(true, dataset));
                 }); 
             });
@@ -59,9 +57,12 @@ module.exports = {
                     _callback(apiResult(false, null, error));
                     return false;
                 }
-                // 没写完的
-                /*collection.save({},{}, function(){
-
+                /*collection.updata(_condition || {}).toArray(function(error, dataset){
+                    if(error){
+                        _callback(apiResult(false, null, error));
+                        return false;
+                    }
+                    _callback(apiResult(true, dataset));
                 });*/
             });
             db.close();
