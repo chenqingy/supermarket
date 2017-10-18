@@ -18,6 +18,7 @@ $(function($){
         }
     })
 
+
     $('#Main_nav').load('../../common.html #main_nav', function(){
         console.log($('#main_content'));
         $navHeight = $('#main_content').height();
