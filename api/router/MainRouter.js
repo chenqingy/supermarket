@@ -1,11 +1,6 @@
 var userRouter = require('./UserRouter.js');
 var productRouter = require('./ProductRoute.js');
 var supplierRouter = require('./SupplierRoute.js');
-<<<<<<< HEAD
-// 所有的路由映射表
-// var allRouter = Object.assign({}, userRouter, productRouter, supplierRouter);
-=======
->>>>>>> f674b7b8fbde6d601c18dc0cd0235a5bc468727e
 
 module.exports = {
     Register: function(express){
@@ -30,11 +25,6 @@ module.exports = {
 
         userRouter.Register(app);
         productRouter.Register(app);
-<<<<<<< HEAD
         supplierRouter.Register(app);
-        // productRouter.Register(app);
-=======
-        supplierRouter.Register(app);        
->>>>>>> f674b7b8fbde6d601c18dc0cd0235a5bc468727e
     }
 }

@@ -27,6 +27,7 @@ $(function($){
                 render();
                 $('input').val('');
                 $('tbody').html('');
+                response(response.status,$responseMessage, response.message);
             }
         })  
     });
@@ -84,6 +85,18 @@ $(function($){
     }
     active();
 
+    // 获取返回的消息显示元素
+    var $responseMessage = $('#responseMessage');
+    // 返回消息显示
+    function response(resSta,$ele,resMessage){
+        $ele.html(resMessage);
+        if(!resSta){
+            $ele.css('color', '#f00');
+            return false;
+        }
+        $ele.css('color', '#58bc58');
+    }
+
     // 删除
     $('#remSupplier').click(function(){
         // console.log($('#objectID').val())
@@ -99,6 +112,7 @@ $(function($){
             $('input').val('');
             $('tbody').html('');
             render(); 
+            response(res.status,$responseMessage, res.message); 
         });
     });
 
@@ -113,6 +127,7 @@ $(function($){
         }, function(res){
             console.log(res);
             $('tbody').html('');
+            response(res.status, $responseMessage, res.message);
             if(!res.status){
                 $('tbody').html(res.message);
                 return false;

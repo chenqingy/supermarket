@@ -37,7 +37,7 @@ module.exports = {
             if (request.body) {
                 doc = request.body;
             }
-            console.log(doc);
+            // console.log(doc);
             var mongodb = require('mongodb');
             var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
             db.delete("supplier", {"_id":obj_id}, function(result){
@@ -61,8 +61,8 @@ module.exports = {
             }
             // console.log(obj);
             db.select("supplier", obj, function(result){
-                console.log(obj);
-                console.log(result);
+                // console.log(obj);
+                // console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, error));
                     return false;
