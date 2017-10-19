@@ -42,7 +42,7 @@ $(function($){
 
     render();
     function render(qty, pageNo){
-        $.post(common.baseUrl + 'addAll',{
+        $.post(common.baseUrl + 'selectSupplier',{
             // qty:qty,
             // pageNo:pageNo
         },
