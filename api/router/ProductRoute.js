@@ -110,7 +110,7 @@ module.exports = {
         });
 
 
-        // 以下是货物管理
+        // 以下是仓库管理
         // 点击进货
         app.post('/goodsAdd', urlencode, function(request, response){
             db.select("stock", {supName: request.body.supName}, function(result){
@@ -180,18 +180,18 @@ module.exports = {
                 response.send(apiResult(true, request.body, "退货成功，供应商已接收到消息"));
             });
         });
-        // 显示所有进货单
+        // 查询仓库商品
         app.post('/showStock', urlencode, function(request, response){
-            db.select("stock", {}, function(result){
+            db.select("stock", request.body, function(result){
                 // console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, "数据请求错误"));
                     return false;
                 }
                 if(result.data.length > 0){
-                    response.send(apiResult(true, result.data, "所有进货信息"));
+                    response.send(apiResult(true, result.data, "仓库所有商品"));
                 } else {
-                    response.send(apiResult(false, null, "没有进货信息"))
+                    response.send(apiResult(false, null, "仓库里该没有商品"))
                 } 
             })
         })

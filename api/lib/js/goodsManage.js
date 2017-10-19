@@ -3,6 +3,11 @@ $(function($){
     // 隐藏数据库里的id
     $('#objectID').parents('.form-group').css('display', 'none');
 
+    // 点击收起/展开进货单
+    $('#packUp').click(function(){
+        $(this).parent().next().slideToggle();
+    })
+
     // 执行权限
     quanxian();
 
@@ -77,6 +82,7 @@ $(function($){
 
         });
     });
+
     /*// 查询
     $('#selPro').click(function(){
         $.post(common.baseUrl + "selectProduct", {
