@@ -2,9 +2,6 @@
 $(function($){
     $('#Head').load('../../common.html #header');
     $('#Main_nav').load('../../common.html #main_nav');
-    
-        
-
 
     $('#Main_nav').load('../../common.html #main_nav', function(){
         console.log($('#main_content'));

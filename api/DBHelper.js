@@ -7,7 +7,7 @@ module.exports = {
     insert: function(_collection, _data, _callback){
         db.open(function(error, db){
             if(error){
-                _callback(apiResult(false, null, error));
+                _callback(apiResult(false, null, "服务器链接错误"));
                 return false;
             } 
 
@@ -27,7 +27,7 @@ module.exports = {
     select: function(_collection, _condition, _callback){
         db.open(function(error, db){
             if(error){
-                _callback(apiResult(false, null, error));
+                _callback(apiResult(false, null, "服务器链接错误"));
                 return false;
             }
             db.collection(_collection, function(error, collection){
@@ -49,7 +49,7 @@ module.exports = {
     update: function(_collection, _condition, _newdata, _callback){
         db.open(function(error, db){
             if(error){
-                _callback(false, null, error);
+                _callback(false, null, "服务器链接错误");
                 return false;
             }
             db.collection(_collection, function(error, collection){
@@ -71,7 +71,7 @@ module.exports = {
     delete: function(_collection, _condition, _callback){
         db.open(function(error, db){
             if(error){
-                _callback(apiResult(false, null, error));
+                _callback(apiResult(false, null, "服务器链接错误"));
                 return false;
             }
             db.collection(_collection, function(error, collection){
@@ -95,7 +95,7 @@ module.exports = {
     find: function(_collection, _condition, _callback){
         db.open(function(error, db){
             if(error){
-                _callback(apiResult(false, null, error));
+                _callback(apiResult(false, null, "服务器链接错误"));
                 return false;
             }
             db.collection(_collection, function(error, collection){
