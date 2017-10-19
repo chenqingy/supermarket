@@ -172,7 +172,7 @@ $(function($){
                                 <td>${item.proName}</td>
                                 <td>${item.proPurPrice}</td>
                                 <td>${item.proQty}</td>
-                                <td style="color:#f00;">${total}元</td>
+                                <td>${total}元</td>
                             </tr>
                         `;
                         $('#stockList').append(html);
