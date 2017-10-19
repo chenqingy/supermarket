@@ -3,6 +3,9 @@ $(function($){
     // 隐藏数据库里的id
     $('#objectID').parents('.form-group').css('display', 'none');
 
+    // 执行权限
+    quanxian();
+
     // 点击tr高亮,并把数据库的内容显示在val框里
     function active(){
         $('tbody').on('click', 'td', function(){
