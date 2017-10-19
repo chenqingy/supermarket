@@ -4,8 +4,8 @@ $(function($){
     $('#Main_nav').load('../../common.html #main_nav');
 
     $('#Main_nav').load('../../common.html #main_nav', function(){
-        console.log($('#main_content'));
         $navHeight = $('#main_content').height();
+        console.log($navHeight);
         $('#Main_nav').height($navHeight);
     });
 
@@ -34,7 +34,7 @@ function quanxian(){
         url: 'http://localhost:88/test1',
         headers: {'Authorization': token},
         success: function(response){
-            console.log(response);
+            // console.log(response);
             if(!response.status){
                 var a = $('<a/>').text('请先登录在访问本页面').attr('href','login.html').css({'font-size':'36px','color':'#fff'});
                 var html = $('<div/>').css({'width':'100%','height':'100%','background-color':'rgba(0,0,0,0.5)',
