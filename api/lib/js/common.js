@@ -1,6 +1,10 @@
 // 将头部引入
 $(function($){
-    $('#Head').load('../../common.html #header');
+    $('#Head').load('../../common.html #header', function(){
+        $('#logout').click(function(){
+            $.cookie('token', null);console.log(660)
+        })
+    });
     $('#Main_nav').load('../../common.html #main_nav');
 
     $('#Main_nav').load('../../common.html #main_nav', function(){
