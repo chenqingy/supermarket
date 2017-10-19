@@ -23,8 +23,25 @@ module.exports = {
                         // response.send(apiResult(true, request.body, "添加成功"));
                         
                     });
-                    response.send(apiResult(true, result.data, "查询成功"));
+                    response.send(apiResult(true, result.data, "添加成功"));
                     
+                } else {
+                    response.send(apiResult(false, null, "没有该商品，请重新查询"));
+                }
+            })
+        });
+        app.post("/Control", urlencode, function(request, response){
+            
+            db.select("order", {proBarCode: request.body.proBarCode}, function(result){
+                // console.log(request.body);
+                // console.log(result);
+                if(!result.status){
+                    response.send(apiResult(false, null, error));
+                    return false;
+                }
+                if(result.data.length > 0 ){
+                    // console.log(result.data);
+                    response.send(apiResult(true, result.data, "添加成功"));
                 } else {
                     response.send(apiResult(false, null, "没有该商品，请重新查询"));
                 }

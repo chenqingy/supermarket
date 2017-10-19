@@ -21,46 +21,86 @@ $(function($){
         })
     };
     active();
-
+    var arr = [];
+    var sum = 0;
     var $responseMessage = $('#responseMessage');
+    var $total = $('#total');
+    var carlist = [];
+    var cookies = document.cookie;
+    if(cookies.length>0){
+        cookies = cookies.split('; ');
+        cookies.forEach(function(cookie){
+            var temp = cookie.split('=');
+            if(temp[0] === 'carlist'){
+                carlist = JSON.parse(temp[1]);
+            }
+        })
+    }
+    
     $barCode.keypress(function(e) {  
         // 获取返回的消息显示元素
        
-        console.log($responseMessage);   
-            
         // 回车键事件  
         if(e.which == 13) {
             var barCode = $barCode.val();
-            console.log(barCode)
-            $.post('http://localhost:88/orderControl', {proBarCode: barCode}, function(res) {
-                /*optional stuff to do after success */
-                console.log(res)
-                response(res.status, $responseMessage, res.message);
+          
+            var a = true;
+            for(var i=0;i<arr.length; i++){
 
-                // if(!res.status){
-                //     // var html = `<tr><td>${res.message}</td></tr>`;
-                //     // $('tbody').html(html).css('text-align', 'center');
-                //     return false;
-                // }
-               
-                if(res.data != null){
-                    $.each(res.data, function(idx,item){
-                        console.log(idx,item);
-                        var html = `
-                            <tr data-guid="${item._id}">
-                                <th scope="row">${idx+1}</th>
-                                <td>${item.proType}</td>
-                                <td>${item.proName}</td>
-                                <td>${item.proDes}</td>
-                                <td>${item.proSalePrice}</td>
-                                <td>${item.proPurPrice}</td>
-                                <td>${item.proSelect}</td>
-                            </tr>
-                        `;
-                        $('tbody').append(html);
-                    });
+                if(arr[i]==$('#barCode').val()){
+                    a=false;
+                    var js=i;
+                    
+                    break;
                 }
-            }); 
+            }
+            if(!a){
+               
+               var qtyinp = $('.datalist').find('tr').eq(js).find('td').eq(4);
+               
+               var qty = qtyinp.html();
+               qty++;
+               qtyinp.html(qty);
+             
+            }else{
+                 $.post('http://localhost:88/orderControl', {proBarCode: barCode}, function(res) {
+                    arr.push(res.data[0].proBarCode);
+                    console.log(arr);
+                    // console.log(res)
+                    response(res.status, $responseMessage, res.message);
+
+                    if(res.data != null){
+                        $.each(res.data, function(idx,item){
+                            console.log(idx,item);
+                            var html = `
+                                <tr data-guid="${item._id}" qrocde="${item.proBarCode}">
+                                    <th scope="row">${idx+1}</th>
+                                    <td>${item.proType}</td>
+                                    <td>${item.proName}</td>
+                                    <td>${item.proDes}</td>
+                                    <td>${item.proSalePrice}</td>
+                                    <td class="qty">${item.proQty}</td>
+                                </tr>
+                            `;
+                            $('tbody').append(html);
+                        });
+                    }
+
+                }); 
+            }
+            setTimeout(function(){
+                var $tr = $('.datalist').find('tr');
+                for(var i=0;i<$tr.length;i++){
+                   var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
+                   var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
+                   var res = (qtys*prics)*1;
+                   sum += res;
+                }
+                
+                $total.val(sum);
+                sum=0;
+            }, 300)
+           
             $barCode.val('');
         }  
     }); 
@@ -70,10 +110,12 @@ $(function($){
         console.log($('#objectID').val());
         $('input').val('');
         $('tbody').html('');
+        arr=[];
     });
     $('tbody').click(function(e){
         console.log(e.target.parentNode)
         var $son = $(e.target.parentNode);
+        var qrocde = $son.attr('qrocde');
         $('#cdelbtn').click(function(){
             $.post("http://localhost:88/delorderControl", {
                 _id:$('#objectID').val()
@@ -81,13 +123,47 @@ $(function($){
                 response(res.status, $responseMessage, res.message);  
             });
             $son.remove();
+            arr.splice(arr.indexOf(qrocde),1);
         })
+        
     });
 
-    $('ackbtn').click(function(){
+    $('#ackbtn').on('click',function(){
 
+        var $gridSystemModalLabel = $('#gridSystemModalLabel');
+        var total = $('#total').val();
+        $gridSystemModalLabel.html('总价：'+total+"￥");
+        $('.modal').modal({
+          keyboard: false
+        })
+        $(".modal-body").qrcode({ 
+            text: "http://10.3.131.14:222/daying.html" //任意内容 
+        }); 
+        var $tr = $('.datalist').find('tr');
+        for(var i=0;i<$tr.length;i++){
+            var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
+            var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
+            var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
+            // var type = $('.datalist').find('tr').eq(i).find('td').eq(0).html();
+            var goods = {
+                // type:,
+                name:name,
+                price:(prics)*1,
+                qty:(qtys)*1,
+                total:$('#total').val()
+            }
+            carlist.push(goods)
+        }
+        console.log(carlist);
+        var date = new Date();
+        date.setDate(date.getDate()+15);
+        document.cookie = 'carlist=' + JSON.stringify(carlist) + ';expires=' + date.toUTCString();
+        carlist = [];
     })
-        
+    $('.close').click(function(){
+        $('.modal-body').html('');
+    });
+   
     // 返回消息显示
     function response(resSta,$ele,resMessage){
         $ele.html(resMessage);
