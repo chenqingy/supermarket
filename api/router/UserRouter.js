@@ -62,7 +62,7 @@ module.exports = {
             db.select("user", {username: request.body.username}, function(result){
                 // console.log(result);
                 if(!result.status){
-                    response.send(apiResult(false, null, error));
+                    response.send(apiResult(false, null, "服务器链接错误"));
                 } else if(result.data.length > 0) {
                     response.send(apiResult(false, null, "当前用户已存在"));
                 } else {
@@ -76,8 +76,9 @@ module.exports = {
         app.post("/login", urlencode, function(request, response){
             db.select("user", request.body, function(result){
                 // console.log(result);
+                // console.log(request.body);
                 if(!result.status){
-                    response.send(apiResult(false, null, error));
+                    response.send(apiResult(false, null, "服务器连接错误，登录失败"));
                     return false;
                 }
                 if(result.data.length > 0 ){

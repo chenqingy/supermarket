@@ -2,14 +2,20 @@ $(function($){
     // 隐藏数据库里的id
     $('#objectID').parents('.form-group').css('display', 'none');
 
+
+    // 获取返回的消息显示元素
+    var $responseMessage = $('#responseMessage');
+
+    // 添加
     $('#addSupplier').click(function(){
         var $supplierType = $('#supplierType').val();
         var $supplierName = $('#supplierName').val();
         var $supplierIden = $('#supplierIden').val();
         var $supplierPhone = $('#supplierPhone').val();
         var $supplierCom = $('#supplierCom').val();
+        var $supplierGoods = $('#supplierGoods').val();
         if(supplierType.length <= 0 && $supplierName.length <= 0 
-            && $supplierIden.length <= 0 && $supplierPhone.length <= 0 && $supplierCom.length <= 0){
+            && $supplierIden.length <= 0 && $supplierPhone.length <= 0 && $supplierCom.length <= 0 && $supplierGoods.length <= 0){
             alert('填写完整数据');
             return false;
         }
@@ -18,17 +24,19 @@ $(function($){
             supplierName:$('#supplierName').val(),
             supplierIden:$('#supplierIden').val(),
             supplierPhone:$('#supplierPhone').val(),
-            supplierCom:$('#supplierCom').val()
-        },function(response){
-            console.log(response);
-            if(response.status){
-                alert('增加数据成功');
+            supplierCom:$('#supplierCom').val(),
+            supplierGoods:$('#supplierGoods').val()
+        },function(res){
+            console.log(res);
+            // if(res.status){
+                // alert('增加数据成功');
                 $('#tablelist').text('');
-                render();
                 $('input').val('');
+                $('textarea').val('');
                 $('tbody').html('');
-                response(response.status,$responseMessage, response.message);
-            }
+                render();
+                response(res.status,$responseMessage, response.message);
+            
         })  
     });
 
@@ -39,16 +47,17 @@ $(function($){
             // pageNo:pageNo
         },
             function(response){
-            // console.log(response);
+            console.log(response);
             if(response.status){
                 $.each(response.data, function(index, item){
                     var html = `<tr data-guid="${item._id}">
                                 <th>${index+1}</th>
                                 <td>${item.supplierType}</td>
-                                <td>${item.supplierId}</td>
                                 <td>${item.supplierName}</td>
+                                <td>${item.supplierIden}</td>
                                 <td>${item.supplierPhone}</td>
                                 <td>${item.supplierCom}</td>
+                                <td>${item.supplierGoods}</td>
                                 </tr>`;
                     $('#tablelist').append(html);
                 })
@@ -79,14 +88,33 @@ $(function($){
             $('#supplierIden').val($(this).parents('tr').children().eq(3).text()); 
             $('#supplierPhone').val($(this).parents('tr').children().eq(4).text()); 
             $('#supplierCom').val($(this).parents('tr').children().eq(5).text()); 
+            $('#supplierGoods').val($(this).parents('tr').children().eq(6).text()); 
             $('#objectID').val($(this).parents('tr').attr('data-guid'));
-            console.log($('#objectID').val());
+            // console.log($('#objectID').val());
         })
     }
     active();
 
-    // 获取返回的消息显示元素
-    var $responseMessage = $('#responseMessage');
+    // //弹窗
+    // $('.modal').modal({
+    //     show: false
+    // });
+    // $('tbody').on('dblclick', 'td', function(){
+    //     var msg = $(this).parents('tr').children().eq(2).text();
+    //     console.log($('#supplierName').val());
+    //     $.post(common.baseUrl + 'selectSupplier',{supplierName:$(this).parents('tr').children().eq(2).text()},
+    //         function(response){
+    //         console.log(response);
+    //         if(response.status){
+    //             var html = response.data.supplierGoods;
+    //             $('.modal-body').html(html);
+    //         }
+    //     })
+    //     $('.modal').modal('toggle');
+    // })
+    
+
+    
     // 删除
     $('#remSupplier').click(function(){
         // console.log($('#objectID').val())
@@ -113,7 +141,8 @@ $(function($){
             supplierName:$('#supplierName').val(),
             supplierIden:$('#supplierIden').val(),
             supplierPhone:$('#supplierPhone').val(),
-            supplierCom:$('#supplierCom').val()
+            supplierCom:$('#supplierCom').val(),
+            supplierGoods:$('#supplierGoods').val()
         }, function(res){
             console.log(res);
             $('tbody').html('');
@@ -132,6 +161,7 @@ $(function($){
                                <td>${item.supplierName}</td>
                                <td>${item.supplierPhone}</td>
                                <td>${item.supplierCom}</td>
+                               <td>${item.supplierGoods}</td>
                                </tr>`;
                     $('#tablelist').append(html);
                     // $('tbody').append(html);
@@ -148,6 +178,7 @@ $(function($){
             supplierIden:$('#supplierIden').val(),
             supplierPhone:$('#supplierPhone').val(),
             supplierCom:$('#supplierCom').val(),
+            supplierGoods:$('#supplierGoods').val(),
             _id:$('#objectID').val()
         }, function(res){
             console.log(res);
@@ -156,6 +187,4 @@ $(function($){
         });
     })
     quanxian();
-
-
 })

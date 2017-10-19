@@ -76,6 +76,7 @@ module.exports = {
                 response.send(apiResult(true, result.data, "查询成功"));
             })
         });
+
         app.post("/modSupplier", urlencode, function(request, response){
             var doc = {};
             if (request.body) {
