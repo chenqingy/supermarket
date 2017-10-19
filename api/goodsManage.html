@@ -19,28 +19,24 @@
                 <div class="menu">
                     <form class="form-inline">
                         <div class="form-group">
-                            <label for="productType">商品类别：</label>
-                            <input type="text" class="form-control" id="productType" placeholder="商品类别">
+                            <label for="productType">供应商公司：</label>
+                            <input type="text" class="form-control" id="productType" placeholder="供应商公司">
                         </div>
                         <div class="form-group">
-                            <label for="productName">商品名称：</label>
-                            <input type="text" class="form-control" id="productName" placeholder="商品名称">
+                            <label for="productName">商品类别：</label>
+                            <input type="text" class="form-control" id="productName" placeholder="供应商公司">
                         </div>
                         <div class="form-group">
-                            <label for="productDes">商品描述：</label>
-                            <input type="text" class="form-control" id="productDes" placeholder="商品描述">
+                            <label for="productDes">商品名称：</label>
+                            <input type="text" class="form-control" id="productDes" placeholder="商品名称">
                         </div>
                         <div class="form-group">
-                            <label for="SalePrice">商品售价：</label>
-                            <input type="text" class="form-control" id="SalePrice" placeholder="商品售价">
+                            <label for="SalePrice">商品进价：</label>
+                            <input type="text" class="form-control" id="SalePrice" placeholder="商品进价">
                         </div>
                         <div class="form-group">
-                            <label for="purPrice">商品进价：</label>
-                            <input type="text" class="form-control" id="purPrice" placeholder="商品进价">
-                        </div>
-                        <div class="form-group">
-                            <label for="barCode">条形码：</label>
-                            <input type="text" class="form-control" id="barCode" placeholder="条形码">
+                            <label for="purPrice">进货数量：</label>
+                            <input type="text" class="form-control" id="purPrice" placeholder="进货数量">
                         </div>
                         <div class="form-group">
                             <label for="objectID">ID：</label>
@@ -51,12 +47,14 @@
                         </div>
                         <div class="button">
                             <button type="button" class="btn btn-default" id="stock">点击进货</button>
+                            <button type="button" class="btn btn-default" id="updateStock">点击修改进货信息</button>
+                            <button type="button" class="btn btn-default" id="goodsReturn">点击退货</button>
                         </div>
                     </form>              
                 </div>
             </div>
             <div class="list">
-                <p>供货单</p>
+                <p>供货单<button type="button" id="packUp">点击/展开收起供货单</button></p>
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
@@ -64,8 +62,6 @@
                             <th>供应商公司</th>
                             <th>商品类别</th>
                             <th>商品名称</th>
-                            <th>商品描述</th>
-                            <th>商品售价</th>
                             <th>商品进价</th>
                         </tr>
                     </thead>
@@ -74,16 +70,17 @@
                 </table>
             </div> 
             <div class="list">
-                <p>进货单</p>
+                <p>库存</p>
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>编号</th>
+                            <th>供应商公司</th>
                             <th>商品类别</th>
                             <th>商品名称</th>
-                            <th>商品描述</th>
-                            <th>商品售价</th>
                             <th>商品进价</th>
+                            <th>数量</th>
+                            <th>总价</th>
                         </tr>   
                     </thead>
                     <tbody id="stockList">
@@ -91,24 +88,25 @@
                     </tbody>
                 </table>
             </div>
-            <div class="list">
+            <!-- <div class="list">
                 <p>收货单</p>
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>编号</th>
+                            <th>供应商公司</th>
                             <th>商品类别</th>
                             <th>商品名称</th>
-                            <th>商品描述</th>
-                            <th>商品售价</th>
                             <th>商品进价</th>
+                            <th>收货数量</th>
+                            <th>售出总价</th>
                         </tr>   
                     </thead>
                     <tbody id="takeList">
                         
                     </tbody>
                 </table>
-            </div>
+            </div> -->
         </article>
     </main>
     <footer>
