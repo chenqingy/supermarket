@@ -3,6 +3,11 @@ $(function($){
     // 隐藏数据库里的id
     $('#objectID').parents('.form-group').css('display', 'none');
 
+    // 点击收起/展开进货单
+    $('#packUp').click(function(){
+        $(this).parent().next().slideToggle();
+    })
+
     // 执行权限
     quanxian();
 
@@ -77,6 +82,7 @@ $(function($){
 
         });
     });
+
     /*// 查询
     $('#selPro').click(function(){
         $.post(common.baseUrl + "selectProduct", {
@@ -163,6 +169,7 @@ $(function($){
                 if(res.data.length > 0){
                     $.each(res.data, function(idx,item){
                         // console.log(idx,item);
+                        var total = Number(item.proPurPrice)*Number(item.proQty);
                         var html = `
                             <tr data-guid="${item._id}">
                                 <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
@@ -171,6 +178,7 @@ $(function($){
                                 <td>${item.proName}</td>
                                 <td>${item.proPurPrice}</td>
                                 <td>${item.proQty}</td>
+                                <td>${total}元</td>
                             </tr>
                         `;
                         $('#stockList').append(html);

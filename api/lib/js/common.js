@@ -9,9 +9,10 @@ $(function($){
 
     $('#Main_nav').load('../../common.html #main_nav', function(){
         $navHeight = $('#main_content').height();
-        console.log($navHeight);
+        // console.log($navHeight);
         $('#Main_nav').height($navHeight);
     });
+
 
 
 });
