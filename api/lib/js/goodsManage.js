@@ -26,7 +26,7 @@ $(function($){
     // 获取返回的消息显示元素
     var $responseMessage = $('#responseMessage');
     
-    // 添加
+    /*// 添加
     $('#addPro').click(function(){
         if($('#barCode').val() == ''){
             $responseMessage.html('添加失败，请输入条形码').css('color', '#f00');
@@ -121,16 +121,16 @@ $(function($){
             $('tbody').html('');
             showProduct();
         });
-    })
+    })*/
 
     // 刷新页面 将所有商品显示在tbody下
     function showProduct(){
         $.ajax({
-            url:common.baseUrl + "allProduct",
+            url:common.baseUrl + "addAll",
             type:"POST",
             data:{},
             success:function(res){
-                // console.log(res.data);
+                console.log(res.data);
                 if(!res.status){
                     var html = `<tr><td>${res.message}</td></tr>`;
                     $('tbody').html(html).css('text-align', 'center');
@@ -142,15 +142,15 @@ $(function($){
                         var html = `
                             <tr data-guid="${item._id}">
                                 <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
+                                <td>${item.supplierCom}</td>
                                 <td>${item.proType}</td>
                                 <td>${item.proName}</td>
                                 <td>${item.proDes}</td>
                                 <td>${item.proSalePrice}</td>
                                 <td>${item.proPurPrice}</td>
-                                <td>${item.proSelect}</td>
                             </tr>
                         `;
-                        $('tbody').append(html);
+                        $('#supplyList').append(html);
                     });
                 }
             }

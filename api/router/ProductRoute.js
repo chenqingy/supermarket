@@ -25,6 +25,7 @@ module.exports = {
         });
         // 删除商品
         app.post("/delProduct", urlencode, function(request, response){
+            // 定义doc来接收出传进来的id
             var doc = {};
             if (request.body) {
                 doc = request.body;
@@ -33,6 +34,7 @@ module.exports = {
                 response.send(apiResult(false, null, "删除失败没有该商品，请重新输入"));
                 return false;
             }
+            // 转换为objectid
             var mongodb = require('mongodb');
             var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
             db.delete("product", {"_id":obj_id}, function(result){
@@ -76,6 +78,7 @@ module.exports = {
             }
             var mongodb = require('mongodb');
             var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
+            // obj为将传进来的参数id过滤。obj为更新后的对象
             var obj = {};
             for(var key in request.body){
                 if(request.body[key] && key != '_id'){

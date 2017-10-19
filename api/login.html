@@ -2,34 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>注册页面</title>
+    <title>登录页面</title>
     <link rel="stylesheet" type="text/css" href="lib/css/base.css" />
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
-    <link rel="stylesheet" href="assets/css/admin.css">
     <script type="text/javascript" src="lib/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="lib/jquery.cookie.js"></script>
     <script type="text/javascript" src="lib/js/common.js"></script>
+    <style>
+        form{width: 300px;margin: 200px auto;}
+        input,button{margin-top: 10px;}
+    </style>
 </head>
 <body>
-    <input type="text" id="username" />
-    <input type="password" id="password" />
-    <input type="button" id="btnLogin" value="登录" />
+    <div class="container">
+        <form class="form-signin">
+            <h3 class="form-signin-heading">欢迎登录超市后台管理系统</h3>
+            <label for="username" class="sr-only">Email address</label>
+            <input type="text" id="username" class="form-control" placeholder="用户名" required autofocus>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="密码" required>
+            <p id="tip"></p>
+            <button class="btn btn-lg btn-primary btn-block" type="button" id="btnLogin">登录</button>
+        </form>
+    </div>
+
     <script type="text/javascript">
-        //json xml
-        //{status: true, data: [], message: null}
         $('#btnLogin').click(function(){
-            $.post("http://localhost:88/login", {
-                username: $('#username').val(),
-                password: $('#password').val(),
+            var username = $('#username').val();
+            var password = $('#password').val();
+            if(username.trim().length <= 0 && password.trim().length <= 0){
+                $('#tip').addClass('text-danger').text('请输入正确的用户名和密码!');
+                return false;
+            }
+            $.post(common.baseUrl + "login", {
+                username: username,
+                password: password
             }, function(response){
-                console.log(response);
+                // console.log(response);
                 if(response.status){
-                    alert('登录成功');
-                    // window.location.href = 'login.html';
+                    $('#tip').addClass('text-success').text('登录成功');
+                    console.log(response.data.token);
+                    $.cookie('token',response.data.token , { expires: 7, path: '/' }); 
+                    window.location.href = 'index.html';
                 } else {
-                    alert(response.message);
+                    $('#tip').addClass('text-danger').text(response.message);
                 }
             })
+
+            // $.ajax({
+            //     type: 'POST',
+            //     url: 'http://localhost:88/test1',
+            //     // data: {name: "dk"},
+            //     headers: {'Authorization': token},
+            //     success: function(response){
+            //         console.log(response);
+            //     }
+            // })
+            // var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx5eSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNTA4MzI1ODQwLCJleHAiOjE1MDgzMjcyODB9.VWrRMf7-5FHMlQDLH41Ao1XPIWzmsBx8ev1GnAayaPQ';
+            // $.ajax({
+            //     type: 'POST',
+            //     url: 'http://localhost:88/test1',
+            //     // data: {name: "dk"},
+            //     headers: {'Authorization': token},
+            //     success: function(response){
+            //         console.log(response);
+            //     }
+            // })
         })
 
     </script>

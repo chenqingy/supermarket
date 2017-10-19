@@ -37,7 +37,7 @@ module.exports = {
             if (request.body) {
                 doc = request.body;
             }
-            console.log(doc);
+            // console.log(doc);
             var mongodb = require('mongodb');
             var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
             db.delete("supplier", {"_id":obj_id}, function(result){
@@ -61,8 +61,8 @@ module.exports = {
             }
             // console.log(obj);
             db.select("supplier", obj, function(result){
-                console.log(obj);
-                console.log(result);
+                // console.log(obj);
+                // console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, error));
                     return false;
@@ -76,6 +76,35 @@ module.exports = {
                 response.send(apiResult(true, result.data, "查询成功"));
             })
         });
+
+        app.post("/modSupplier", urlencode, function(request, response){
+            var doc = {};
+            if (request.body) {
+                doc = request.body;
+            }
+            if(doc._id == ''){
+                response.send(apiResult(false, null, "更改失败没有该商品，请重新输入"));
+                return false;
+            }
+            var mongodb = require('mongodb');
+            var obj_id = new mongodb.ObjectID.createFromHexString(doc._id);
+            // obj为将传进来的参数id过滤。obj为更新后的对象
+            var obj = {};
+            for(var key in request.body){
+                if(request.body[key] && key != '_id'){
+                    var value = request.body[key];
+                    obj[key] = value;
+                }
+            }
+            db.update("supplier", {"_id":obj_id}, obj, function(result){
+                if(!result.status){
+                    response.send(apiResult(false, null, "服务器链接错误"));
+                    return false;
+                }
+                response.send(apiResult(true, request.body, "更新成功"));
+            });
+            
+        })
 
 
 

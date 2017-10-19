@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>商品管理</title>
+    <title>进货页面</title>
     <link rel="stylesheet" type="text/css" href="lib/css/base.css" />
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css" />
     <script type="text/javascript" src="lib/jquery-3.2.1.js"></script>
     <script type="text/javascript" src="lib/jquery.cookie.js"></script>
     <script type="text/javascript" src="lib/js/common.js"></script>
-    <script src="lib/js/product.js" type="text/javascript"></script>
+    <script src="lib/js/goodsManage.js" type="text/javascript"></script>
 </head>
 <body>
     <header id="Head"></header>
@@ -47,25 +47,34 @@
                             <input type="text" class="form-control" id="objectID" placeholder="ID">
                         </div>
                         <div class="form-group">
-                            <label for="select">上架状态：</label>
-                            <select class="form-control" id="select">
-                                <option>已上架</option>
-                                <option>未上架</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <span id="responseMessage"></span>
                         </div>
                         <div class="button">
-                            <button type="button" class="btn btn-default" id="addPro">增加</button>
-                            <button type="button" class="btn btn-default" id="delPro">删除</button> 
-                            <button type="button" class="btn btn-default" id="selPro">查询</button> 
-                            <button type="button" class="btn btn-default" id="modPro">更新</button> 
+                            <button type="button" class="btn btn-default" id="stock">点击进货</button>
                         </div>
                     </form>              
                 </div>
             </div>
             <div class="list">
+                <p>供货单</p>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>供应商公司</th>
+                            <th>商品类别</th>
+                            <th>商品名称</th>
+                            <th>商品描述</th>
+                            <th>商品售价</th>
+                            <th>商品进价</th>
+                        </tr>
+                    </thead>
+                    <tbody  id="supplyList">
+                    </tbody>
+                </table>
+            </div> 
+            <div class="list">
+                <p>进货单</p>
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
@@ -75,14 +84,31 @@
                             <th>商品描述</th>
                             <th>商品售价</th>
                             <th>商品进价</th>
-                            <th>上架状态</th>
-                        </tr>
+                        </tr>   
                     </thead>
-                    <tbody>
+                    <tbody id="stockList">
                         
                     </tbody>
                 </table>
-            </div> 
+            </div>
+            <div class="list">
+                <p>收货单</p>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>商品类别</th>
+                            <th>商品名称</th>
+                            <th>商品描述</th>
+                            <th>商品售价</th>
+                            <th>商品进价</th>
+                        </tr>   
+                    </thead>
+                    <tbody id="takeList">
+                        
+                    </tbody>
+                </table>
+            </div>
         </article>
     </main>
     <footer>

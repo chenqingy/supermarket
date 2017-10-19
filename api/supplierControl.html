@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Document</title>
+    <title>供应商管理</title>
     <link rel="stylesheet" type="text/css" href="lib/css/base.css" />
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
-    <link rel="stylesheet" href="assets/css/admin.css">
     <script type="text/javascript" src="lib/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.cookie.js"></script>
     <script type="text/javascript" src="lib/js/common.js"></script>
     <script type="text/javascript" src="lib/js/supplier.js"></script>
 </head>
@@ -19,8 +19,8 @@
             <div class="menu">
                 <form class="form-inline">
                     <div class="form-group">
-                        <label for="productType">供应商类别：</label>
-                        <input type="text" class="form-control" id="supplierType" placeholder="供应商类别">
+                        <label for="productType">商品类别：</label>
+                        <input type="text" class="form-control" id="supplierType" placeholder="商品类别">
                     </div>
                     <div class="form-group">
                         <label for="productName">供应商名称：</label>
@@ -35,19 +35,28 @@
                         <input type="text" class="form-control" id="supplierPhone" placeholder="供应商联系方式">
                     </div>
                     <div class="form-group">
-                        <label for="purPrice">供应商公司：</label>
-                        <input type="text" class="form-control" id="supplierCom" placeholder="供应商公司">
+                        <label for="purPrice">商品价格：</label>
+                        <input type="text" class="form-control" id="supplierCom" placeholder="商品价格">
                     </div>
                     <div class="form-group">
                         <label for="objectID">ID：</label>
                         <input type="text" class="form-control" id="objectID" placeholder="ID">
                     </div>
+
+                    <div class="form-group">
+                        <label for="objectArea">提供的商品：</label>
+                        <input type="text" class="form-control" id="supplierGoods" placeholder="提供的商品">
+                    </div>
                    
+                    <div class="form-group">
+                       <span id="responseMessage"></span>
+                    </div>
+                    
                     <div class="button">
                         <button type="button" class="btn btn-default" id="addSupplier">增加</button>
                         <button type="button" class="btn btn-default" id="remSupplier">删除</button>
                         <button type="button" class="btn btn-default" id="selSupplier">查询</button>
-                        <button type="button" class="btn btn-default" id="delSupplier">修改</button>
+                        <button type="button" class="btn btn-default" id="modSupplier">修改</button>
                     </div>
                 </form>            
             </div>  
@@ -56,20 +65,40 @@
                     <thead>
                         <tr>
                             <th>编号</th>
-                            <th>供应商类别</th>
+                            <th>商品类别</th>
                             <th>供应商名称</th>
                             <th>供应商职务</th>
                             <th>供应商联系方式</th>
-                            <th>供应商公司</th>
+                            <th>商品价格</th>
+                            <th>供应商提供商品</th>
                         </tr>
                     </thead>
                     <tbody id="tablelist">
                     </tbody>
+                    <div id="goodlist">
+                         <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                        <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+                          </div>
+                          <div class="modal-body">
+                          
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
                 </table>
             </div>
-            <button class="btn btn-success" id="loadMore">加载更多...</button>        
+            <!-- <button class="btn btn-success" id="loadMore">加载更多...</button>    -->   
         </article>
     </main>
-    <footer></footer>
+    <footer>
+    </footer>
 </body>
 </html>

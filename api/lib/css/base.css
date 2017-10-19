@@ -47,8 +47,10 @@ body{
  #header{
     height:72px;
 } 
+
 #Main_nav{
     width:13%;
+    background-color:#F5F5F5;
     float:left;
 } 
 article{
@@ -76,3 +78,5 @@ article .button{
     border-bottom: 5px dashed #ddd;
 }
 table.table{margin-top: 20px;padding-top: 20px;}
+
+

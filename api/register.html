@@ -5,31 +5,45 @@
     <title>注册页面</title>
     <link rel="stylesheet" type="text/css" href="lib/css/base.css" />
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
-    <link rel="stylesheet" href="assets/css/admin.css">
     <script type="text/javascript" src="lib/jquery-3.2.1.js"></script>
     <script type="text/javascript" src="lib/js/common.js"></script>
+    <style>
+        form{width: 300px;margin: 200px auto;}
+        input,button{margin-top: 10px;}
+    </style>
 </head>
 <body>
-    <input type="text" id="username" />
-    <input type="password" id="password" />
-    <input type="button" id="btnRegister" value="注册" />
+    <div class="container">
+        <form class="form-signin">
+            <h3 class="form-signin-heading">欢迎注册超市后台管理系统</h3>
+            <label for="username" class="sr-only">Email address</label>
+            <input type="text" id="username" class="form-control" placeholder="用户名" required autofocus>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="密码" required>
+            <p id="tip"></p>
+            <button class="btn btn-lg btn-primary btn-block" type="button" id="btnRegister">注册</button>
+        </form>
+    </div>
 
     <script type="text/javascript">
-        //json xml
-        //{status: true, data: [], message: null}
+        
         $('#btnRegister').click(function(){
-            $.post("http://localhost:88/register", {
-                username: $('#username').val(),
+            var username = $('#username').val();
+            var password = $('#password').val();
+            if(username.trim().length <= 0 && password.trim().length <= 0){
+                $('#tip').addClass('text-danger').text('请输入正确的用户名和密码!');
+                return false;
+            }
+            $.post(common.baseUrl + "register", {
+                username: username ,
                 password: $('#password').val()
             }, function(response){
-                
-                console.log(response);
+                // console.log(response);
                 if(response.status){
-                    alert('注册成功');
+                    $('#tip').addClass('text-success').text('注册成功!');
                     window.location.href = 'login.html';
                 } else {
-                    alert(response.message);
+                    $('#tip').addClass('text-danger').text(response.message);
                 }
             })
         })
