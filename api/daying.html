@@ -23,6 +23,7 @@
         .section5 label{display: block;}
         .times{float:right;}
         </style>
+        <script type="text/javascript" src="lib/js/common.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     </head>
     <body style="background-color:#fff;">
@@ -50,8 +51,8 @@
                         <thead>
                             <tr>
                                 <td width="60%">商品名称</td>
-                                <td width="20%">数量</td>
                                 <td width="20%">单价</td>
+                                <td width="20%">数量</td>
                             </tr>
                         </thead>
                         <tbody class="dealWith">
@@ -95,46 +96,132 @@
         
         
         <script type="text/javascript">
-            window.onload = function(){
-                var cookies = document.cookie;
-
-                var carlist = [];
-                if(cookies.length>0){
-                    cookies = cookies.split('; ');
-                    cookies.forEach(function(cookie){
-                        var temp = cookie.split('=');
-
-                        if(temp[0] === 'carlist'){
-                            // 把json字符串转成数组
-                            carlist = JSON.parse(temp[1]);
-                        }
-                    });
-                }
-                console.log(carlist);
-                //获取传递过来的参数
+            // window.onload = function(){
+            $(function(){
+                var a = parseInt(location.search.slice(3));
+                console.log(a);
                 var tatol = 0;
                 var date = new Date();
+                $.post(common.baseUrl + 'AControl',{orderid: a}, function(res) {
+                    // console.log(res.data);
+                    // var rr = res.data;
+                    // var ra = rr[0];
+                    // $('.dealWith').html();
+                    // console.log(res);
+                    $('.times').html(date.toLocaleString( ))
+                    var html = res.data.map(function(item){
+                        var rr = JSON.parse(item.data);
+                        $.each(rr, function(idx,arr){
+                            console.log(arr);
+                            var tr=$('<tr/>');
+                            $.each(arr, function(num, str){
+                                $('<td>').text(str).appendTo(tr);
+                                // console.log(str)
+                                
 
-                // console.log();
-                $('.times').html(date.toLocaleString( ))
-                $('.dealWith').html(carlist.map(function(item){
-                    // console.log(item.sale_price*item.goods_qty)
-                    tatol += item.price*item.qty;
-                    return `<tr>
-                        <td>${item.name}</td>
-                        <td>${item.qty}</td>
-                        <td>${item.price}</td>
-                    </tr>`
-                }));
-                // console.log(tatol)
-                $('.tatol').text(tatol)
-                
-                $('.btn-danger').click(function() {
-                    var day = date.toLocaleString() - 10;
-                    document.cookie = 'carlist=' + null + ';expires=' + day;
-                    window.location.href="http://10.3.131.14:222/orderControl.html";
+                            });
+                            tr.appendTo($('.dealWith'));
+                        })
+                        // rr.map(function(item){
+                        //     console.log(item.name)
+                        //     // tatol += item.price*item.qty;
+                        //     return `<tr>
+                        //         <td>${item.name}</td>
+                        //         <td>${item.qty}</td>
+                        //         <td>${item.price}</td>
+                        //     </tr>`  
+                        // }).join('');
+                        
+                    });
+                    console.log(html);
                 });
-            }
+                var sum = 0;
+                var dongxi = '';
+                setTimeout(function(){
+                    var $tr = $('.dealWith').find('tr');
+                    console.log($tr);
+                    
+                    for(var i=0;i<$tr.length;i++){
+                        var name = $('.dealWith').find('tr').eq(i).find('td').eq(0).html();
+                        var price = $('.dealWith').find('tr').eq(i).find('td').eq(1).html();
+                        var qty = $('.dealWith').find('tr').eq(i).find('td').eq(2).html();
+                        var res = (qty*price)*1;
+                        sum += res;
+                        dongxi +=`${name}　　　　${price}　　　　${qty}<br/>` 
+                    };
+                }, 500);
+                
+                // for(var i=0;i<$tr.length;i++){
+                //    var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
+                //    var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
+                //    var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
+                //    var res = (qtys*prics)*1;
+                //    sum += res;
+                //    var obj = {
+                //         name:name,
+                //         prics:prics,
+                //         qtys:qtys
+                //    }
+                //    arr1.push(obj);
+                // }
+                var date = new Date().toLocaleString();
+                console.log(date);
+                $('.btn-success').click(function() {
+                    $.post("http://10.3.131.33:81/print", {text:
+                     `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
+                 }, function(res){
+                        console.log(res)
+                    })
+                });
+                // $('.btn-success').click(function() {
+                //     $.post("http://10.3.131.33:81/print", {text:
+                //      `华联万家收银系统\n  
+                //      *************************************\n
+                //      商品名称：香烟\n
+                //      单品金额：100 元 \n
+                //      商品数量：10 条\n
+                //      总金额：1000 元\n
+                //      买单时间：2017-08-15 10:53:19\n
+                //      *************************************\n`
+                //  }, function(res){
+                //         console.log(res)
+                //     })
+                // });
+                
+               
+                
+
+                $('.btn-danger').click(function() {
+                    
+                });
+
+                var ws;
+                
+                ws = new WebSocket("ws://http://10.3.131.14:222");
+                ws.onmessage = function(_msg){
+                    console.log(_msg.data);
+                }   
+
+                ws.onopen = function(){
+                    // $('.connState').text('服务已连接');
+                }   
+
+                ws.onclose = function(){
+                    // $('.connState').text('服务已断开');
+                }
+
+
+                $('.btn-success').click(function(){
+                    ws.send("true");
+                })
+
+                $('.btn-danger').click(function(){
+                    ws.send("false");
+                    ws.close();
+                })
+
+
+            })
         </script>
     </body>
 </html>
