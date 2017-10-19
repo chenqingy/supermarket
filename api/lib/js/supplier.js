@@ -56,17 +56,17 @@ $(function($){
         })
     }
 
-    $('#loadMore').click(function(){
-        // var pageNo = 1;
-        // pageNo++;
-        // console.log(pageNo);
-        // if(pageNo > 3){
-        //     alert("当前已经是最后一页");
-        //     return false;
-        // }
-        // render(5, pageNo);
-        alert('我不能再给你更多了');
-    })
+    // $('#loadMore').click(function(){
+    //     // var pageNo = 1;
+    //     // pageNo++;
+    //     // console.log(pageNo);
+    //     // if(pageNo > 3){
+    //     //     alert("当前已经是最后一页");
+    //     //     return false;
+    //     // }
+    //     // render(5, pageNo);
+    //     alert('我不能再给你更多了');
+    // })
 
     function active(){
         $('tbody').on('click', 'td', function(){
@@ -87,16 +87,6 @@ $(function($){
 
     // 获取返回的消息显示元素
     var $responseMessage = $('#responseMessage');
-    // 返回消息显示
-    function response(resSta,$ele,resMessage){
-        $ele.html(resMessage);
-        if(!resSta){
-            $ele.css('color', '#f00');
-            return false;
-        }
-        $ele.css('color', '#58bc58');
-    }
-
     // 删除
     $('#remSupplier').click(function(){
         // console.log($('#objectID').val())
@@ -149,6 +139,22 @@ $(function($){
             }
         });
     });
+
+    // 修改
+    $('#modSupplier').click(function(){
+        $.post(common.baseUrl + "modSupplier", {
+            supplierType:$('#supplierType').val(),
+            supplierName:$('#supplierName').val(),
+            supplierIden:$('#supplierIden').val(),
+            supplierPhone:$('#supplierPhone').val(),
+            supplierCom:$('#supplierCom').val(),
+            _id:$('#objectID').val()
+        }, function(res){
+            console.log(res);
+            $('tbody').html('');
+            render();
+        });
+    })
     // var token = $.cookie('token');
     // $.ajax({
     //     type: 'POST',

@@ -41,6 +41,11 @@
                         <label for="objectID">ID：</label>
                         <input type="text" class="form-control" id="objectID" placeholder="ID">
                     </div>
+
+                    <div class="form-group">
+                        <label for="objectArea">提供的商品：</label>
+                        <textarea class="form-control" id="objectArea" rows="3" placeholder="提供的商品"></textarea>
+                    </div>
                    
                     <div class="form-group">
                        <span id="responseMessage"></span>
@@ -50,7 +55,7 @@
                         <button type="button" class="btn btn-default" id="addSupplier">增加</button>
                         <button type="button" class="btn btn-default" id="remSupplier">删除</button>
                         <button type="button" class="btn btn-default" id="selSupplier">查询</button>
-                        <button type="button" class="btn btn-default" id="delSupplier">修改</button>
+                        <button type="button" class="btn btn-default" id="modSupplier">修改</button>
                     </div>
                 </form>            
             </div>  
@@ -70,7 +75,7 @@
                     </tbody>
                 </table>
             </div>
-            <button class="btn btn-success" id="loadMore">加载更多...</button>        
+            <!-- <button class="btn btn-success" id="loadMore">加载更多...</button>    -->   
         </article>
     </main>
     <footer></footer>
