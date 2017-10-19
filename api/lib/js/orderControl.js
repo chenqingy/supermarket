@@ -137,7 +137,7 @@ $(function($){
           keyboard: false
         })
         $(".modal-body").qrcode({ 
-            text: "http://10.3.131.14:222/daying.html" //任意内容 
+            text: "http://10.3.131.25:1707/daying.html" //任意内容 
         }); 
         var $tr = $('.datalist').find('tr');
         for(var i=0;i<$tr.length;i++){

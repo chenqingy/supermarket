@@ -95,7 +95,7 @@
         
         
         <script type="text/javascript">
-            window.onload = function(){
+            $(function(){
                 var cookies = document.cookie;
 
                 var carlist = [];
@@ -134,7 +134,7 @@
                     document.cookie = 'carlist=' + null + ';expires=' + day;
                     window.location.href="http://10.3.131.14:222/orderControl.html";
                 });
-            }
+            })
         </script>
     </body>
 </html>
