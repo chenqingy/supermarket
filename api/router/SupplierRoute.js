@@ -8,7 +8,7 @@ module.exports = {
     Register: function(app){
         app.post("/addSupplier", urlencode, function(request, response){
             db.select("supplier", {supplierName: request.body.supplierName}, function(result){
-                console.log(result);
+                // console.log(result);
                 if(!result.status){
                     response.send(apiResult(false, null, error));
                 } else if(result.data.length > 0) {
@@ -16,7 +16,7 @@ module.exports = {
                 } else {
                     db.insert("supplier", request.body, function(result){
                         response.send(apiResult(true, request.body, "供应商添加成功"));
-                        console.log(result);
+                        // console.log(result);
                     })
                 }
             })
