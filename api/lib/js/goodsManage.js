@@ -163,6 +163,7 @@ $(function($){
                 if(res.data.length > 0){
                     $.each(res.data, function(idx,item){
                         // console.log(idx,item);
+                        var total = Number(item.proPurPrice)*Number(item.proQty);
                         var html = `
                             <tr data-guid="${item._id}">
                                 <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
@@ -171,6 +172,7 @@ $(function($){
                                 <td>${item.proName}</td>
                                 <td>${item.proPurPrice}</td>
                                 <td>${item.proQty}</td>
+                                <td style="color:#f00;">${total}元</td>
                             </tr>
                         `;
                         $('#stockList').append(html);
