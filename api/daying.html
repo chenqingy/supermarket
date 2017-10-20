@@ -170,6 +170,7 @@
                 var date = new Date().toLocaleString();
                 console.log(date);
                 setTimeout(function(){
+                    $('.tatol').html(sum);
                     $('.btn-success').click(function() {
                         $.post("http://10.3.131.33:81/print", {text:
                          `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
