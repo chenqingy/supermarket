@@ -1,4 +1,6 @@
 $(function($){
+    quanxian();
+
     var $barCode = $('#main_content #event .menu #barCode');
     
     // 隐藏数据库里的id
@@ -63,7 +65,7 @@ $(function($){
                qtyinp.html(qty);
              
             }else{
-                 $.post('http://localhost:88/orderControl', {proBarCode: barCode}, function(res) {
+                 $.post(common.baseUrl + 'orderControl', {proBarCode: barCode}, function(res) {
                     arr.push(res.data[0].proBarCode);
                     console.log(arr);
                     // console.log(res)
@@ -104,6 +106,7 @@ $(function($){
             $barCode.val('');
         }  
     }); 
+    
     // 删除
     $('#cdel').click(function(){
         console.log(777);
@@ -117,7 +120,7 @@ $(function($){
         var $son = $(e.target.parentNode);
         var qrocde = $son.attr('qrocde');
         $('#cdelbtn').click(function(){
-            $.post("http://localhost:88/delorderControl", {
+            $.post(common.baseUrl + "/delorderControl", {
                 _id:$('#objectID').val()
             }, function(res){
                 response(res.status, $responseMessage, res.message);  
@@ -127,7 +130,7 @@ $(function($){
         })
         
     });
-
+    var a =parseInt(Math.random()*1000000);
     $('#ackbtn').on('click',function(){
 
         var $gridSystemModalLabel = $('#gridSystemModalLabel');
@@ -136,29 +139,61 @@ $(function($){
         $('.modal').modal({
           keyboard: false
         })
+
         $(".modal-body").qrcode({ 
-            text: "http://10.3.131.25:1707/daying.html" //任意内容 
+
+            text: "http://10.3.131.30:1707/daying.html?a="+a //任意内容 
+
         }); 
+        // setTimeout(function(){
+        //     window.location.href="daying.html?a="+a;
+        // }, 3000);
+        
         var $tr = $('.datalist').find('tr');
+        var arr1 = [];
         for(var i=0;i<$tr.length;i++){
-            var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
-            var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
-            var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
-            // var type = $('.datalist').find('tr').eq(i).find('td').eq(0).html();
-            var goods = {
-                // type:,
+           var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
+           var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
+           var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
+           var res = (qtys*prics)*1;
+           sum += res;
+           var obj = {
                 name:name,
-                price:(prics)*1,
-                qty:(qtys)*1,
-                total:$('#total').val()
-            }
-            carlist.push(goods)
+                prics:prics,
+                qtys:qtys
+           }
+           arr1.push(obj);
         }
-        console.log(carlist);
-        var date = new Date();
-        date.setDate(date.getDate()+15);
-        document.cookie = 'carlist=' + JSON.stringify(carlist) + ';expires=' + date.toUTCString();
-        carlist = [];
+        console.log(arr1);
+        arr1 = JSON.stringify(arr1);
+        $.post(common.baseUrl + 'addOrder',
+           {orderid:a,
+            total:total,
+            status:"false",
+            data:arr1}
+        , function(res) {
+            /*optional stuff to do after success */
+        });
+        // var $tr = $('.datalist').find('tr');
+        // for(var i=0;i<$tr.length;i++){
+        //     var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
+        //     var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
+        //     var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
+        //     // var type = $('.datalist').find('tr').eq(i).find('td').eq(0).html();
+        //     var goods = {
+        //         // type:,
+        //         name:name,
+        //         price:(prics)*1,
+        //         qty:(qtys)*1,
+        //         total:$('#total').val()
+        //     }
+        //     carlist.push(goods)
+        // }
+        // console.log(carlist);
+        // var date = new Date();
+        // date.setDate(date.getDate()+15);
+        // document.cookie = 'carlist=' + JSON.stringify(carlist) + ';expires=' + date.toUTCString();
+        // carlist = [];
     })
     $('.close').click(function(){
         $('.modal-body').html('');
@@ -173,4 +208,20 @@ $(function($){
         }
         $ele.css('color', '#58bc58');
     }
+
+    // var socket = null;
+    // if (!socket) {
+    //     socket = io("ws://localhost:888");
+    // }
+    // // socket.emit('ServerLogin', JSON.stringify(person));
+
+    // socket.on('printOpen', function(print){
+        
+    //     console.log(print);
+        
+    // })
+
+    
+
+    
 })
