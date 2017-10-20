@@ -17,7 +17,6 @@ $(function($){
             $('#productName').val($(this).parents('tr').children().eq(2).text()); 
             $('#productDes').val($(this).parents('tr').children().eq(3).text()); 
             $('#SalePrice').val($(this).parents('tr').children().eq(4).text()); 
-            $('#purPrice').val($(this).parents('tr').children().eq(5).text());
             $('#barCode').val($(this).parents('tr').children('th').attr('barcode'));
             $('#objectID').val($(this).parents('tr').attr('data-guid'));
         })
@@ -34,19 +33,20 @@ $(function($){
         }
         // 上架商品 上架之前先查询是否有这个商品
         $.post(common.baseUrl + "showStock",{proName:$('#productName').val()}, function(yeyeresult){
-            // console.log(yeyeresult);
+            
             // 如果仓库里没有该商品，提示信息
             if(!yeyeresult.status){
                 $responseMessage.html(yeyeresult.message);
                 return false;
             }
+            console.log(yeyeresult);
             // 仓库里有商品， 发送请求添加进上架库
             $.post(common.baseUrl + "addProduct", {
                 proType:$('#productType').val(),
                 proName:$('#productName').val(),
                 proDes:$('#productDes').val(),
                 proSalePrice:$('#SalePrice').val(),
-                proPurPrice:$('#purPrice').val(),
+                proPurPrice:yeyeresult.data[0].proPurPrice,
                 proBarCode:$('#barCode').val(),
                 proSelect:$('#select').val(),
                 proQty:1
@@ -61,6 +61,8 @@ $(function($){
                 $.post(common.baseUrl + "showStock", {
                     proName:$('#productName').val()
                 }, function(cangkuresult){
+                    // 清空val框
+                    $('input').val('');
                     // 显示的是每次点击时，对应名字的仓库的商品信息
                     var obj = {
                         proName: cangkuresult.data[0].proName,
@@ -75,6 +77,7 @@ $(function($){
                     $.post(common.baseUrl + "goodsUpdate", obj, function(result1){
                         console.log("仓库数量-1");
 
+
                     });
                 });
             });
@@ -82,38 +85,45 @@ $(function($){
     });
     // 删除
     $('#delPro').click(function(){
+        // 下架商品 下架之前先查询是否有这个商品
+        $.post(common.baseUrl + "showStock",{proName:$('#productName').val()}, function(yeyeresult){
+            // 如果仓库里没有该商品，提示信息
+            if(!yeyeresult.status){
+                $responseMessage.html(yeyeresult.message);
+                return false;
+            }
+            $.post(common.baseUrl + "delProduct", {
+                _id:$('#objectID').val()
+            }, function(res){
+                // 输入框为空,加载数据库的数据，显示返回消息
+                $('tbody').html('');
+                showProduct(); 
+                response(res.status, $responseMessage, "下架成功");  
 
-        $.post(common.baseUrl + "delProduct", {
-            _id:$('#objectID').val()
-        }, function(res){
-            // 输入框为空,加载数据库的数据，显示返回消息
-            $('tbody').html('');
-            showProduct(); 
-            response(res.status, $responseMessage, "下架成功");  
+                // 每下架一件同名商品，仓库的数量+1,发送仓库请求搜索对应名字的商品 获取仓库商品id去更改qty
+                $.post(common.baseUrl + "showStock", {
+                    proName:$('#productName').val()
+                }, function(cangkuresult){
+                    // 清空val框
+                    $('input').val('');
+                    // 显示的是每次点击时，对应名字的仓库的商品信息
+                    var obj = {
+                        proName: cangkuresult.data[0].proName,
+                        proPurPrice: cangkuresult.data[0].proPurPrice,
+                        proQty: Number(cangkuresult.data[0].proQty),
+                        proType: cangkuresult.data[0].proType,
+                        supName: cangkuresult.data[0].supName,
+                        _id:cangkuresult.data[0]._id
+                    }
+                    obj.proQty++;
+                    // 发信息更改仓库数量
+                    $.post(common.baseUrl + "goodsUpdate", obj, function(result1){
+                        console.log("仓库数量+1");
 
-            // 每下架一件同名商品，仓库的数量+1,发送仓库请求搜索对应名字的商品 获取仓库商品id去更改qty
-            $.post(common.baseUrl + "showStock", {
-                proName:$('#productName').val()
-            }, function(cangkuresult){
-                // 仓库数量更改之后清空val框
-                $('input').val('');
-                // 显示的是每次点击时，对应名字的仓库的商品信息
-                var obj = {
-                    proName: cangkuresult.data[0].proName,
-                    proPurPrice: cangkuresult.data[0].proPurPrice,
-                    proQty: Number(cangkuresult.data[0].proQty),
-                    proType: cangkuresult.data[0].proType,
-                    supName: cangkuresult.data[0].supName,
-                    _id:cangkuresult.data[0]._id
-                }
-                obj.proQty++;
-                // 发信息更改仓库数量
-                $.post(common.baseUrl + "goodsUpdate", obj, function(result1){
-                    console.log("仓库数量+1");
-
+                    });
                 });
             });
-        });
+        })
     });
     // 查询
     $('#selPro').click(function(){
@@ -122,7 +132,6 @@ $(function($){
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
             proSalePrice:$('#SalePrice').val(),
-            proPurPrice:$('#purPrice').val(),
             proBarCode:$('#barCode').val(),
             proSelect:$('#select').val(),
             proQty:1
@@ -159,7 +168,6 @@ $(function($){
             proName:$('#productName').val(),
             proDes:$('#productDes').val(),
             proSalePrice:$('#SalePrice').val(),
-            proPurPrice:$('#purPrice').val(),
             proBarCode:$('#barCode').val(),
             proSelect:$('#select').val(),
             proQty:1,
@@ -188,18 +196,22 @@ $(function($){
                 if(res.data.length > 0){
                     $.each(res.data, function(idx,item){
                         // console.log(idx,item);
-                        var html = `
-                            <tr data-guid="${item._id}">
-                                <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
-                                <td>${item.proType}</td>
-                                <td>${item.proName}</td>
-                                <td>${item.proDes}</td>
-                                <td>${item.proSalePrice}</td>
-                                <td>${item.proPurPrice}</td>
-                                <td>${item.proSelect}</td>
-                            </tr>
-                        `;
-                        $('tbody').append(html);
+                        // 进入页面，上架库里有商品 则发送搜索仓库的请求拿出 进货价格写入页面
+                        $.post(common.baseUrl + "showStock", {proName:item.proName}, function(result){
+                            // console.log(result.data[0].proPurPrice);
+                            var html = `
+                                <tr data-guid="${item._id}">
+                                    <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
+                                    <td>${item.proType}</td>
+                                    <td>${item.proName}</td>
+                                    <td>${item.proDes}</td>
+                                    <td>${item.proSalePrice}</td>
+                                    <td>${result.data[0].proPurPrice}</td>
+                                    <td>${item.proSelect}</td>
+                                </tr>
+                            `;
+                            $('tbody').append(html);
+                        })
                     });                        
                 }
             }

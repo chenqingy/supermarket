@@ -79,7 +79,6 @@ $(function($){
             $('#stockList').html('');
             showStock();
             showSup();
-
         });
     });
 
@@ -154,7 +153,7 @@ $(function($){
         
     }
     showSup();
-    // 显示进货单
+    // 显示库存
     function showStock(){
         $.ajax({
             url:common.baseUrl + "showStock",

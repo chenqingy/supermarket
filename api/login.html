@@ -41,7 +41,7 @@
                 // console.log(response);
                 if(response.status){
                     $('#tip').addClass('text-success').text('登录成功');
-                    console.log(response.data.token);
+                    // console.log(response.data.token);
                     $.cookie('token',response.data.token , { expires: 7, path: '/' }); 
                     window.location.href = 'index.html';
                 } else {
