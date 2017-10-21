@@ -197,8 +197,12 @@ $(function($){
                     $.each(res.data, function(idx,item){
                         // console.log(idx,item);
                         // 进入页面，上架库里有商品 则发送搜索仓库的请求拿出 进货价格写入页面
+                        var purPrice;
                         $.post(common.baseUrl + "showStock", {proName:item.proName}, function(result){
-                            // console.log(result.data[0].proPurPrice);
+                            purPrice = result.data[0].proPurPrice;
+                        });
+                        setTimeout(function(){
+                            console.log(purPrice);
                             var html = `
                                 <tr data-guid="${item._id}">
                                     <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>
@@ -206,12 +210,13 @@ $(function($){
                                     <td>${item.proName}</td>
                                     <td>${item.proDes}</td>
                                     <td>${item.proSalePrice}</td>
-                                    <td>${result.data[0].proPurPrice}</td>
+                                    <td>${purPrice}</td>
                                     <td>${item.proSelect}</td>
                                 </tr>
                             `;
                             $('tbody').append(html);
-                        })
+                        }, 500)
+                            
                     });                        
                 }
             }

@@ -142,7 +142,7 @@ $(function($){
 
         $(".modal-body").qrcode({ 
 
-            text: "http://10.3.131.30:1707/daying.html?a="+a //任意内容 
+            text: "http://10.3.131.5:8888/daying.html?a="+a //任意内容 
 
         }); 
         // setTimeout(function(){
