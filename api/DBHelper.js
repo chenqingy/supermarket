@@ -1,7 +1,7 @@
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var db;
-MongoClient.connect("mongodb://10.3.131.5:27017/supermarket", function(err, database) {
+MongoClient.connect("mongodb://10.3.131.28:27017/supermarket", function(err, database) {
   if(err) throw err;
   db = database;
 });

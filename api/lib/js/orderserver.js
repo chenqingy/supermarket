@@ -2,11 +2,9 @@ var io = require('socket.io')();
 //events
 
 io.on("connection", function(client){
-    // console.log(123);
-    // client.on('ServerLogin', function(_person){
-    //     io.emit("CreatePersons", JSON.stringify(onlinePersons));   
-    // })
-
+    client.on('LinkStart',function(){
+        console.log('LinkStart');
+    })
     client.on("printStart", function(){
         console.log('printStart');
         io.emit("printOpen");

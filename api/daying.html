@@ -105,7 +105,9 @@
                 console.log(a);
                 var tatol = 0;
                 var date = new Date();
-                $.post('http://10.3.131.5:88/AControl',{orderid: a}, function(res) {
+                var sum = 0;
+                var dongxi = '';
+                $.post('http://10.3.131.28:88/AControl',{orderid: a}, function(res) {
                     // console.log(res.data);
                     // var rr = res.data;
                     // var ra = rr[0];
@@ -137,22 +139,24 @@
                         
                     });
                     console.log(html);
+
+
+                    // setTimeout(function(){
+                        var $tr = $('.dealWith').find('tr');
+                        console.log($tr);
+                        
+                        for(var i=0;i<$tr.length;i++){
+                            var name = $('.dealWith').find('tr').eq(i).find('td').eq(0).html();
+                            var price = $('.dealWith').find('tr').eq(i).find('td').eq(1).html();
+                            var qty = $('.dealWith').find('tr').eq(i).find('td').eq(2).html();
+                            var res = (qty*price)*1;
+                            sum += res;
+                            dongxi +=`${name}　　　　${price}　　　　${qty}<br/>` 
+                        };
+                    // }, 500);
+
                 });
-                var sum = 0;
-                var dongxi = '';
-                setTimeout(function(){
-                    var $tr = $('.dealWith').find('tr');
-                    console.log($tr);
-                    
-                    for(var i=0;i<$tr.length;i++){
-                        var name = $('.dealWith').find('tr').eq(i).find('td').eq(0).html();
-                        var price = $('.dealWith').find('tr').eq(i).find('td').eq(1).html();
-                        var qty = $('.dealWith').find('tr').eq(i).find('td').eq(2).html();
-                        var res = (qty*price)*1;
-                        sum += res;
-                        dongxi +=`${name}　　　　${price}　　　　${qty}<br/>` 
-                    };
-                }, 500);
+                
                 
                 // for(var i=0;i<$tr.length;i++){
                 //    var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
@@ -169,16 +173,16 @@
                 // }
                 var date = new Date().toLocaleString();
                 console.log(date);
-                setTimeout(function(){
+                // setTimeout(function(){
                     $('.tatol').html(sum);
-                    $('.btn-success').click(function() {
+                    $('.btn-danger').click(function() {
                         $.post("http://10.3.131.33:81/print", {text:
                          `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
                      }, function(res){
                             console.log(res)
                         })
                     });
-                },500);
+                // },500);
                     
                 // $('.btn-success').click(function() {
                 //     $.post("http://10.3.131.33:81/print", {text:
@@ -226,19 +230,18 @@
                 // })
 
 
-                // var socket = null;
-                // if (!socket) {
-                //     socket = io("ws://localhost:888");
-                // }
-                // // socket.emit('ServerLogin');
-
-                // $('.btn-success').click(function(){
-                //     socket.on('printStart', function(_persons){
+                var socket = null;
+                if (!socket) {
+                    socket = io("ws://10.3.131.19:888");
+                }
+                socket.emit('LinkStart');
+                $('.btn-success').click(function(){
+                    socket.emit('printStart');
+                    socket.on('printOpen', function(_persons){ 
+                            console.log('printStart');
                             
-                //             console.log('printStart');
-                            
-                //         })
-                // })
+                    })
+                })
                 
 
 
