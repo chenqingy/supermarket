@@ -25,6 +25,7 @@ $(function($){
     active();
     var arr = [];
     var sum = 0;
+    var dongxi = '';
     var $responseMessage = $('#responseMessage');
     var $total = $('#total');
     
@@ -133,11 +134,7 @@ $(function($){
         $(".modal-body .erweima").qrcode({ 
             text: "http://10.3.131.30:222/daying.html?a="+a //任意内容 
         }); 
-        // $(".modal-body .erweima").hide();
-        // $(".modal-body .defeate").hide();
-        setTimeout(function(){
-            window.location.href="daying.html?a="+a;
-        }, 3000);
+
         
         var $tr = $('.datalist').find('tr');
         var arr1 = [];
@@ -147,6 +144,7 @@ $(function($){
            var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
            var res = (qtys*prics)*1;
            sum += res;
+           dongxi +=`${name}　　　　${price}　　　　${qty}<br/>`
            var obj = {
                 name:name,
                 prics:prics,
@@ -180,8 +178,40 @@ $(function($){
         $ele.css('color', '#58bc58');
     }
 
+    var socket = null;
+    if (!socket) {
+        socket = io("ws://localhost:888");
+    }
+    // socket.emit('LinkStart')
+    socket.on('printOpen', function(print){
+        
+        
+           
+        
+        $.post("http://10.3.131.33:81/print", {text:
+             `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
+         }, function(res){
+             console.log(res)
+        })
+        $(".modal-body .erweima").hide();
+        // $(".modal-body .defeate").hide();
+        $('.modal-body .succee').show();
+        setTimeout(function(){
+            $('modal-body').hide();
+        }, 500);
 
-    
+        
+        
+
+    })
+
+    socket.on('printEnd',function(print){
+        $(".modal-body .erweima").hide();
+        $(".modal-body .defeate").show();
+        setTimeout(function(){
+            $('modal-body').hide();
+        }, 500);
+    })
 
     
 })
