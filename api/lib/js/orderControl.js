@@ -142,7 +142,7 @@ $(function($){
 
         $(".modal-body").qrcode({ 
 
-            text: "http://10.3.131.5:8888/daying.html?a="+a //任意内容 
+            text: "http://10.3.131.19:1707/daying.html?a="+a //任意内容 
 
         }); 
         // setTimeout(function(){
@@ -209,17 +209,24 @@ $(function($){
         $ele.css('color', '#58bc58');
     }
 
-    // var socket = null;
-    // if (!socket) {
-    //     socket = io("ws://localhost:888");
-    // }
-    // // socket.emit('ServerLogin', JSON.stringify(person));
+    var socket = null;
+    if (!socket) {
+        socket = io("ws://localhost:888");
+    }
+    // socket.emit('LinkStart')
+    socket.on('printOpen', function(print){
+        
+        console.log('print');
+        $('.tatol').html(sum);
+        
+        $.post("http://10.3.131.33:81/print", {text:
+             `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
+         }, function(res){
+             console.log(res)
+        })
+        
 
-    // socket.on('printOpen', function(print){
-        
-    //     console.log(print);
-        
-    // })
+    })
 
     
 
