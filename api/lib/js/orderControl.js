@@ -25,19 +25,10 @@ $(function($){
     active();
     var arr = [];
     var sum = 0;
+    var dongxi = '';
     var $responseMessage = $('#responseMessage');
     var $total = $('#total');
-    var carlist = [];
-    var cookies = document.cookie;
-    if(cookies.length>0){
-        cookies = cookies.split('; ');
-        cookies.forEach(function(cookie){
-            var temp = cookie.split('=');
-            if(temp[0] === 'carlist'){
-                carlist = JSON.parse(temp[1]);
-            }
-        })
-    }
+    
     
     $barCode.keypress(function(e) {  
         // 获取返回的消息显示元素
@@ -140,14 +131,10 @@ $(function($){
           keyboard: false
         })
 
-        $(".modal-body").qrcode({ 
-
-            text: "http://10.3.131.19:1707/daying.html?a="+a //任意内容 
-
+        $(".modal-body .erweima").qrcode({ 
+            text: "http://10.3.131.30:222/daying.html?a="+a //任意内容 
         }); 
-        // setTimeout(function(){
-        //     window.location.href="daying.html?a="+a;
-        // }, 3000);
+
         
         var $tr = $('.datalist').find('tr');
         var arr1 = [];
@@ -157,6 +144,7 @@ $(function($){
            var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
            var res = (qtys*prics)*1;
            sum += res;
+           dongxi +=`${name}　　　　${price}　　　　${qty}<br/>`
            var obj = {
                 name:name,
                 prics:prics,
@@ -174,26 +162,7 @@ $(function($){
         , function(res) {
             /*optional stuff to do after success */
         });
-        // var $tr = $('.datalist').find('tr');
-        // for(var i=0;i<$tr.length;i++){
-        //     var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
-        //     var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
-        //     var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
-        //     // var type = $('.datalist').find('tr').eq(i).find('td').eq(0).html();
-        //     var goods = {
-        //         // type:,
-        //         name:name,
-        //         price:(prics)*1,
-        //         qty:(qtys)*1,
-        //         total:$('#total').val()
-        //     }
-        //     carlist.push(goods)
-        // }
-        // console.log(carlist);
-        // var date = new Date();
-        // date.setDate(date.getDate()+15);
-        // document.cookie = 'carlist=' + JSON.stringify(carlist) + ';expires=' + date.toUTCString();
-        // carlist = [];
+        
     })
     $('.close').click(function(){
         $('.modal-body').html('');
@@ -216,19 +185,33 @@ $(function($){
     // socket.emit('LinkStart')
     socket.on('printOpen', function(print){
         
-        console.log('print');
-        $('.tatol').html(sum);
+        
+           
         
         $.post("http://10.3.131.33:81/print", {text:
              `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
          }, function(res){
              console.log(res)
         })
+        $(".modal-body .erweima").hide();
+        // $(".modal-body .defeate").hide();
+        $('.modal-body .succee').show();
+        setTimeout(function(){
+            $('modal-body').hide();
+        }, 500);
+
+        
         
 
     })
 
-    
+    socket.on('printEnd',function(print){
+        $(".modal-body .erweima").hide();
+        $(".modal-body .defeate").show();
+        setTimeout(function(){
+            $('modal-body').hide();
+        }, 500);
+    })
 
     
 })
