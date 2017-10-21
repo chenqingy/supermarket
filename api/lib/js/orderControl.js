@@ -27,17 +27,7 @@ $(function($){
     var sum = 0;
     var $responseMessage = $('#responseMessage');
     var $total = $('#total');
-    var carlist = [];
-    var cookies = document.cookie;
-    if(cookies.length>0){
-        cookies = cookies.split('; ');
-        cookies.forEach(function(cookie){
-            var temp = cookie.split('=');
-            if(temp[0] === 'carlist'){
-                carlist = JSON.parse(temp[1]);
-            }
-        })
-    }
+    
     
     $barCode.keypress(function(e) {  
         // 获取返回的消息显示元素
@@ -140,9 +130,11 @@ $(function($){
           keyboard: false
         })
 
-        $(".modal-body").qrcode({ 
-            text: "http://10.3.131.14:222/daying.html?a="+a //任意内容 
+        $(".modal-body .erweima").qrcode({ 
+            text: "http://10.3.131.30:222/daying.html?a="+a //任意内容 
         }); 
+        // $(".modal-body .erweima").hide();
+        // $(".modal-body .defeate").hide();
         setTimeout(function(){
             window.location.href="daying.html?a="+a;
         }, 3000);
@@ -172,26 +164,7 @@ $(function($){
         , function(res) {
             /*optional stuff to do after success */
         });
-        // var $tr = $('.datalist').find('tr');
-        // for(var i=0;i<$tr.length;i++){
-        //     var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
-        //     var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
-        //     var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
-        //     // var type = $('.datalist').find('tr').eq(i).find('td').eq(0).html();
-        //     var goods = {
-        //         // type:,
-        //         name:name,
-        //         price:(prics)*1,
-        //         qty:(qtys)*1,
-        //         total:$('#total').val()
-        //     }
-        //     carlist.push(goods)
-        // }
-        // console.log(carlist);
-        // var date = new Date();
-        // date.setDate(date.getDate()+15);
-        // document.cookie = 'carlist=' + JSON.stringify(carlist) + ';expires=' + date.toUTCString();
-        // carlist = [];
+        
     })
     $('.close').click(function(){
         $('.modal-body').html('');

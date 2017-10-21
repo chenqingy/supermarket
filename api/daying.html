@@ -102,42 +102,80 @@
                 console.log(a);
                 var tatol = 0;
                 var date = new Date();
-                $.post(common.baseUrl + 'AControl',{orderid: a}, function(res) {
-                    // console.log(res.data);
-                    // var rr = res.data;
-                    // var ra = rr[0];
-                    // $('.dealWith').html();
-                    // console.log(res);
-                    $('.times').html(date.toLocaleString( ))
-                    var html = res.data.map(function(item){
-                        var rr = JSON.parse(item.data);
-                        $.each(rr, function(idx,arr){
-                            console.log(arr);
-                            var tr=$('<tr/>');
-                            $.each(arr, function(num, str){
-                                $('<td>').text(str).appendTo(tr);
-                                // console.log(str)
-                                
-
-                            });
-                            tr.appendTo($('.dealWith'));
-                        })
-                        // rr.map(function(item){
-                        //     console.log(item.name)
-                        //     // tatol += item.price*item.qty;
-                        //     return `<tr>
-                        //         <td>${item.name}</td>
-                        //         <td>${item.qty}</td>
-                        //         <td>${item.price}</td>
-                        //     </tr>`  
-                        // }).join('');
-                        
-                    });
-                    console.log(html);
-                });
                 var sum = 0;
                 var dongxi = '';
-                setTimeout(function(){
+                // $.post(common.baseUrl + 'AControl',{orderid: a},false, function(res) {
+                //     // console.log(res.data);
+                //     // var rr = res.data;
+                //     // var ra = rr[0];
+                //     // $('.dealWith').html();
+                //     // console.log(res);
+                //     // $('.times').html(date.toLocaleString( ))
+                //     // var html = res.data.map(function(item){
+                //     //     var rr = JSON.parse(item.data);
+                //     //     $.each(rr, function(idx,arr){
+                //     //         console.log(arr);
+                //     //         var tr=$('<tr/>');
+                //     //         $.each(arr, function(num, str){
+                //     //             $('<td>').text(str).appendTo(tr);
+                //     //             // console.log(str)
+                                
+
+                //     //         });
+                //     //         tr.appendTo($('.dealWith'));
+                //     //     })
+                //     //     // rr.map(function(item){
+                //     //     //     console.log(item.name)
+                //     //     //     // tatol += item.price*item.qty;
+                //     //     //     return `<tr>
+                //     //     //         <td>${item.name}</td>
+                //     //     //         <td>${item.qty}</td>
+                //     //     //         <td>${item.price}</td>
+                //     //     //     </tr>`  
+                //     //     // }).join('');
+                        
+                //     // });
+                //     // console.log(html);
+                // });
+                $.ajax({
+                    url: common.baseUrl + 'AControl',
+                    type: 'POST',
+                    // dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+                    data: {orderid: a},
+                    async: false,
+                    success:function(res){
+                        $('.times').html(date.toLocaleString( ))
+                        var html = res.data.map(function(item){
+                            var rr = JSON.parse(item.data);
+                            $.each(rr, function(idx,arr){
+                                console.log(arr);
+                                var tr=$('<tr/>');
+                                $.each(arr, function(num, str){
+                                    $('<td>').text(str).appendTo(tr);
+                                    // console.log(str)
+                                    
+
+                                });
+                                tr.appendTo($('.dealWith'));
+                            })
+                            // rr.map(function(item){
+                            //     console.log(item.name)
+                            //     // tatol += item.price*item.qty;
+                            //     return `<tr>
+                            //         <td>${item.name}</td>
+                            //         <td>${item.qty}</td>
+                            //         <td>${item.price}</td>
+                            //     </tr>`  
+                            // }).join('');
+                            
+                        });
+                        console.log(html);
+                    }
+                })
+                
+                
+                // setTimeout(function(){
+                    
                     var $tr = $('.dealWith').find('tr');
                     console.log($tr);
                     
@@ -149,30 +187,26 @@
                         sum += res;
                         dongxi +=`${name}　　　　${price}　　　　${qty}<br/>` 
                     };
-                }, 500);
+                    // console.log(sum)
+                    console.log(dongxi)
+                // }, 100);
                 
-                // for(var i=0;i<$tr.length;i++){
-                //    var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
-                //    var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
-                //    var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
-                //    var res = (qtys*prics)*1;
-                //    sum += res;
-                //    var obj = {
-                //         name:name,
-                //         prics:prics,
-                //         qtys:qtys
-                //    }
-                //    arr1.push(obj);
-                // }
                 var date = new Date().toLocaleString();
-                console.log(date);
-                $('.btn-success').click(function() {
-                    $.post("http://10.3.131.33:81/print", {text:
-                     `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
-                 }, function(res){
-                        console.log(res)
-                    })
-                });
+                
+
+                // setTimeout(function(){
+                    console.log(dongxi)
+                     $('.tatol').html(sum);
+                    console.log(sum)
+                    $('.btn-success').click(function() {
+                        $.post("http://10.3.131.33:81/print", {text:
+                         `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
+                     }, function(res){
+                            console.log(res)
+                        })
+                    });
+
+                // }, 20)
                 // $('.btn-success').click(function() {
                 //     $.post("http://10.3.131.33:81/print", {text:
                 //      `华联万家收银系统\n  
@@ -191,34 +225,34 @@
                
                 
 
-                $('.btn-danger').click(function() {
+                // $('.btn-danger').click(function() {
                     
-                });
+                // });
 
-                var ws;
+                // var ws;
                 
-                ws = new WebSocket("ws://http://10.3.131.14:222");
-                ws.onmessage = function(_msg){
-                    console.log(_msg.data);
-                }   
+                // ws = new WebSocket("ws://http://10.3.131.14:222");
+                // ws.onmessage = function(_msg){
+                //     console.log(_msg.data);
+                // }   
 
-                ws.onopen = function(){
-                    // $('.connState').text('服务已连接');
-                }   
+                // ws.onopen = function(){
+                //     // $('.connState').text('服务已连接');
+                // }   
 
-                ws.onclose = function(){
-                    // $('.connState').text('服务已断开');
-                }
+                // ws.onclose = function(){
+                //     // $('.connState').text('服务已断开');
+                // }
 
 
-                $('.btn-success').click(function(){
-                    ws.send("true");
-                })
+                // $('.btn-success').click(function(){
+                //     ws.send("true");
+                // })
 
-                $('.btn-danger').click(function(){
-                    ws.send("false");
-                    ws.close();
-                })
+                // $('.btn-danger').click(function(){
+                //     ws.send("false");
+                //     ws.close();
+                // })
 
 
             })
