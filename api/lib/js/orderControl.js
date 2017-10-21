@@ -25,11 +25,12 @@ $(function($){
     active();
     var arr = [];
     var sum = 0;
-    var dongxi = '';
+    var dongxi ='';
     var $responseMessage = $('#responseMessage');
     var $total = $('#total');
-    
-    
+    var date = new Date().toLocaleString();
+    var a =parseInt(Math.random()*1000000);
+    var arr1 = [];
     $barCode.keypress(function(e) {  
         // 获取返回的消息显示元素
        
@@ -121,9 +122,9 @@ $(function($){
         })
         
     });
-    var a =parseInt(Math.random()*1000000);
-    $('#ackbtn').on('click',function(){
 
+
+    $('#ackbtn').on('click',function(){
         var $gridSystemModalLabel = $('#gridSystemModalLabel');
         var total = $('#total').val();
         $gridSystemModalLabel.html('总价：'+total+"￥");
@@ -131,20 +132,24 @@ $(function($){
           keyboard: false
         })
 
-        $(".modal-body .erweima").qrcode({ 
-            text: "http://10.3.131.30:222/daying.html?a="+a //任意内容 
-        }); 
+        $(".erweima").qrcode({ 
 
+            text: "http://10.3.131.19:1707/daying.html?a="+a //任意内容 
+
+        }); 
+        // setTimeout(function(){
+        //     window.location.href="daying.html?a="+a;
+        // }, 3000);
         
         var $tr = $('.datalist').find('tr');
-        var arr1 = [];
+        
         for(var i=0;i<$tr.length;i++){
            var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
            var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
            var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
            var res = (qtys*prics)*1;
+           dongxi +=`${name}　　　　${prics}　　　　${qtys}<br/>` 
            sum += res;
-           dongxi +=`${name}　　　　${price}　　　　${qty}<br/>`
            var obj = {
                 name:name,
                 prics:prics,
@@ -162,10 +167,29 @@ $(function($){
         , function(res) {
             /*optional stuff to do after success */
         });
-        
+        // var $tr = $('.datalist').find('tr');
+        // for(var i=0;i<$tr.length;i++){
+        //     var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
+        //     var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
+        //     var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
+        //     // var type = $('.datalist').find('tr').eq(i).find('td').eq(0).html();
+        //     var goods = {
+        //         // type:,
+        //         name:name,
+        //         price:(prics)*1,
+        //         qty:(qtys)*1,
+        //         total:$('#total').val()
+        //     }
+        //     carlist.push(goods)
+        // }
+        // console.log(carlist);
+        // var date = new Date();
+        // date.setDate(date.getDate()+15);
+        // document.cookie = 'carlist=' + JSON.stringify(carlist) + ';expires=' + date.toUTCString();
+        // carlist = [];
     })
     $('.close').click(function(){
-        $('.modal-body').html('');
+        $('.erweima').html('');
     });
    
     // 返回消息显示
@@ -184,34 +208,81 @@ $(function($){
     }
     // socket.emit('LinkStart')
     socket.on('printOpen', function(print){
-        
-        
-           
-        
+        var $tr = $('.datalist').find('tr');
+        var arr2 = [];
+        for(var i=0;i<$tr.length;i++){
+           var qtys = $('.datalist').find('tr').eq(i).find('td').eq(4).html();
+           var prics = $('.datalist').find('tr').eq(i).find('td').eq(3).html();
+           var name = $('.datalist').find('tr').eq(i).find('td').eq(1).html();
+           var res = (qtys*prics)*1;
+           dongxi +=`${name}　　　　${prics}　　　　${qtys}<br/>` 
+           sum += res;
+           var obj = {
+                name:name,
+                prics:prics,
+                qtys:qtys
+           }
+           arr2.push(obj);
+        }
+        console.log('print');
+        $('.succee').show();
+        $('.erweima').html('');
+        // $.post(common.baseUrl + '')
+        $.post(common.baseUrl + 'AControl',{orderid:a}, function(res) {
+            var objId = res.data[0]._id;
+            var sum = total.value;
+            console.log(objId)
+            console.log(total.value,arr1)
+            $.post(common.baseUrl + 'updataOrder',
+               {orderid:a,
+                total:sum,
+                status:"true",
+                data:arr1,
+                _id:objId
+            }, function(res) {
+                console.log(res);
+            })
+        })
         $.post("http://10.3.131.33:81/print", {text:
              `华联万家收银系统\n*************************************\n商品名称          单价         数量  \n${dongxi}　　　　\n总金额：${sum} 元\n时间：${date}\n*************************************\n`
          }, function(res){
              console.log(res)
         })
-        $(".modal-body .erweima").hide();
-        // $(".modal-body .defeate").hide();
-        $('.modal-body .succee').show();
-        setTimeout(function(){
-            $('modal-body').hide();
-        }, 500);
+
+        // $.post(common.baseUrl + 'AControl',{}, function(res) {
+        //     var objId = res.data._id;
+        //     $.post(common.baseUrl + 'updataOrder',
+        //        {orderid:a,
+        //         total:total,
+        //         status:"true",
+        //         data:arr1,
+        //         _id:objId
+        //     }
+        //     , function(res) {
+        //         console.log(res);
+        //     }
+        // })
 
         
-        
+        setTimeout(function(){
+            $('.modal').modal('hide');
+        },2000);
 
     })
 
-    socket.on('printEnd',function(print){
-        $(".modal-body .erweima").hide();
-        $(".modal-body .defeate").show();
+    socket.on('printEnd', function(print){
+        
+        console.log('print');
+        $('.defeate').show();
+        $('.erweima').html('');
+        
+        
         setTimeout(function(){
-            $('modal-body').hide();
-        }, 500);
+            $('.modal').modal('hide');
+        },2000);
+
     })
+    
 
     
 })
