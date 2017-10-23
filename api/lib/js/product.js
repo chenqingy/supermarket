@@ -85,45 +85,48 @@ $(function($){
     });
     // 删除
     $('#delPro').click(function(){
-        // 下架商品 下架之前先查询是否有这个商品
-        $.post(common.baseUrl + "showStock",{proName:$('#productName').val()}, function(yeyeresult){
-            // 如果仓库里没有该商品，提示信息
-            if(!yeyeresult.status){
-                $responseMessage.html(yeyeresult.message);
-                return false;
-            }
-            $.post(common.baseUrl + "delProduct", {
-                _id:$('#objectID').val()
-            }, function(res){
-                // 输入框为空,加载数据库的数据，显示返回消息
-                $('tbody').html('');
-                showProduct(); 
-                response(res.status, $responseMessage, "下架成功");  
+        var res = confirm("你确定要下架吗");
+        if(res == true){
+            // 下架商品 下架之前先查询是否有这个商品
+            $.post(common.baseUrl + "showStock",{proName:$('#productName').val()}, function(yeyeresult){
+                // 如果仓库里没有该商品，提示信息
+                if(!yeyeresult.status){
+                    $responseMessage.html(yeyeresult.message);
+                    return false;
+                }
+                $.post(common.baseUrl + "delProduct", {
+                    _id:$('#objectID').val()
+                }, function(res){
+                    // 输入框为空,加载数据库的数据，显示返回消息
+                    $('tbody').html('');
+                    showProduct(); 
+                    response(res.status, $responseMessage, "下架成功");  
 
-                // 每下架一件同名商品，仓库的数量+1,发送仓库请求搜索对应名字的商品 获取仓库商品id去更改qty
-                $.post(common.baseUrl + "showStock", {
-                    proName:$('#productName').val()
-                }, function(cangkuresult){
-                    // 清空val框
-                    $('input').val('');
-                    // 显示的是每次点击时，对应名字的仓库的商品信息
-                    var obj = {
-                        proName: cangkuresult.data[0].proName,
-                        proPurPrice: cangkuresult.data[0].proPurPrice,
-                        proQty: Number(cangkuresult.data[0].proQty),
-                        proType: cangkuresult.data[0].proType,
-                        supName: cangkuresult.data[0].supName,
-                        _id:cangkuresult.data[0]._id
-                    }
-                    obj.proQty++;
-                    // 发信息更改仓库数量
-                    $.post(common.baseUrl + "goodsUpdate", obj, function(result1){
-                        console.log("仓库数量+1");
+                    // 每下架一件同名商品，仓库的数量+1,发送仓库请求搜索对应名字的商品 获取仓库商品id去更改qty
+                    $.post(common.baseUrl + "showStock", {
+                        proName:$('#productName').val()
+                    }, function(cangkuresult){
+                        // 清空val框
+                        $('input').val('');
+                        // 显示的是每次点击时，对应名字的仓库的商品信息
+                        var obj = {
+                            proName: cangkuresult.data[0].proName,
+                            proPurPrice: cangkuresult.data[0].proPurPrice,
+                            proQty: Number(cangkuresult.data[0].proQty),
+                            proType: cangkuresult.data[0].proType,
+                            supName: cangkuresult.data[0].supName,
+                            _id:cangkuresult.data[0]._id
+                        }
+                        obj.proQty++;
+                        // 发信息更改仓库数量
+                        $.post(common.baseUrl + "goodsUpdate", obj, function(result1){
+                            console.log("仓库数量+1");
 
+                        });
                     });
                 });
-            });
-        })
+            })
+        }   
     });
     // 查询
     $('#selPro').click(function(){
@@ -198,11 +201,18 @@ $(function($){
                         // console.log(idx,item);
                         // 进入页面，上架库里有商品 则发送搜索仓库的请求拿出 进货价格写入页面
                         var purPrice;
+                        if(purPrice == undefined){
+                            $responseMessage.html("正在请求数据");
+                            showOverlay($('body'));
+                        }
                         $.post(common.baseUrl + "showStock", {proName:item.proName}, function(result){
                             purPrice = result.data[0].proPurPrice;
+                            
                         });
+                        
                         setTimeout(function(){
-                            console.log(purPrice);
+                            $responseMessage.html('');
+                            hideOverlay($('body'));
                             var html = `
                                 <tr data-guid="${item._id}">
                                     <th scope="row" barcode="${item.proBarCode}">${idx+1}</th>

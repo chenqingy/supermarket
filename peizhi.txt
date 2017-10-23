@@ -1,1 +1,5 @@
-1、api/daying.html 110行 改成主机ip
+1.
+2 api文件夹下命令打开node server
+3.lib/js文件夹下命令打开node orderserver
+4.DBHelper.js   ip改成主机ip
+5.daying.html  110行 改成主机ip  235行 改成主机ip

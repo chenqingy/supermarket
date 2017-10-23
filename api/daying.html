@@ -107,7 +107,7 @@
                 var date = new Date();
                 var sum = 0;
                 var dongxi = '';
-                $.post('http://10.3.131.28:88/AControl',{orderid: a}, function(res) {
+                $.post('http://10.3.131.22:88/AControl',{orderid: a}, function(res) {
                     // console.log(res.data);
                     // var rr = res.data;
                     // var ra = rr[0];
@@ -232,7 +232,7 @@
 
                 var socket = null;
                 if (!socket) {
-                    socket = io("ws://10.3.131.19:888");
+                    socket = io("ws://10.3.131.22:888");
                 }
                 socket.emit('LinkStart');
                 $('.btn-success').click(function(){
